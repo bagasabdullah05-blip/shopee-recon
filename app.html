@@ -1,0 +1,559 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sistem Shopee — HPP, Laba, Pelanggan Multi-Bulan</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<style>
+*{box-sizing:border-box;font-family:Inter,system-ui,sans-serif}
+body{margin:0;background:#f8fafc;color:#0f172a}
+header{background:#0f172a;color:#fff;padding:14px 20px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;position:sticky;top:0;z-index:10}
+header h1{margin:0;font-size:16px}
+nav{display:flex;gap:6px}
+nav button{padding:8px 14px;border-radius:8px;border:1px solid #334155;background:#1e293b;color:#cbd5e1;font-weight:600;cursor:pointer}
+nav button.active{background:#ee4d2d;border-color:#ee4d2d;color:#fff}
+.container{max-width:1250px;margin:18px auto;padding:0 14px}
+.card{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:16px;margin-bottom:14px}
+.kpi{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+@media(max-width:700px){.kpi{grid-template-columns:repeat(2,1fr)}}
+.kpi div{background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:12px;text-align:center}
+.kpi b{font-size:18px;display:block}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:900px){.grid2{grid-template-columns:1fr}}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:7px 8px;border-bottom:1px solid #e2e8f0;text-align:left}
+th{background:#f8fafc;position:sticky;top:0}
+input,select{padding:8px 10px;border:1px solid #cbd5e1;border-radius:8px;width:100%}
+.btn{background:#ee4d2d;color:#fff;border:none;padding:8px 14px;border-radius:8px;font-weight:700;cursor:pointer}
+.btn2{background:#0f172a;color:#fff;border:none;padding:8px 14px;border-radius:8px;font-weight:700;cursor:pointer}
+.badge{padding:2px 7px;border-radius:999px;font-size:11px;font-weight:700}
+.ok{background:#dcfce7;color:#166534}
+.warn{background:#fef9c3;color:#854d0e}
+.small{font-size:12px;color:#64748b}
+</style>
+</head>
+<body>
+<header>
+<div style="background:#ee4d2d;width:32px;height:32px;border-radius:8px;display:grid;place-items:center;font-weight:900">S</div>
+<h1>Sistem Shopee — Multi Bulan</h1>
+<nav style="margin-left:auto">
+<button data-tab="upload" class="active">Upload Bulanan</button>
+<button data-tab="laba">Laba Bersih</button>
+<button data-tab="hpp">Database HPP</button>
+<button data-tab="pelanggan">Daftar Pelanggan</button>
+<a href="output/DASHBOARD_SHOPEE.html" style="background:#fff;color:#0f172a;padding:8px 14px;border-radius:8px;text-decoration:none;font-weight:700;margin-left:8px">→ Dashboard Visual (Produk & Timeline)</a>
+</nav>
+</header>
+<div style="background:#fef9c3;border-bottom:1px solid #fde68a;padding:8px 20px;font-size:12px;text-align:center">Terhubung dengan <a href="output/DASHBOARD_SHOPEE.html" style="color:#0f172a;font-weight:700">Dashboard Visual</a> — data sinkron via localStorage (offline aman) • <select id="viewPeriode" style="padding:4px 8px;border-radius:6px;border:1px solid #fde68a;font-weight:700;width:auto;display:inline-block"><option value="all">Semua Bulan</option></select> <button id="btnViewPeriode" class="btn2" style="padding:4px 10px;font-size:12px">Tampilkan</button> • <button id="btnPanduan" class="btn" style="padding:4px 10px;font-size:12px;background:#16a34a">📖 Panduan Orang Awam</button></div>
+<div id="panduanAwam" style="display:none;background:#f0fdf4;border-bottom:2px solid #16a34a;padding:16px 20px">
+<h3 style="margin:0 0 8px;color:#166534">📖 Panduan untuk Orang Awam (3 Langkah Saja)</h3>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;font-size:13px">
+<div style="background:#fff;padding:12px;border-radius:8px;border:1px solid #bbf7d0;text-align:center"><b style="background:#16a34a;color:#fff;width:28px;height:28px;display:inline-grid;place-items:center;border-radius:999px">1</b><br><b>Ambil Laporan Shopee</b><br>Buka Shopee Seller Center → Keuangan → Penghasilan → Klik <b>Export</b> → dapat file <code>Income.xlsx</code></div>
+<div style="background:#fff;padding:12px;border-radius:8px;border:1px solid #bbf7d0;text-align:center"><b style="background:#16a34a;color:#fff;width:28px;height:28px;display:inline-grid;place-items:center;border-radius:999px">2</b><br><b>Upload di Sini</b><br>Buka file <code>app.html</code> → Pilih <b>Bulan</b> (misal 2026-09) → Klik <b>Pilih File</b> → Klik <b>Proses & Simpan</b></div>
+<div style="background:#fff;padding:12px;border-radius:8px;border:1px solid #bbf7d0;text-align:center"><b style="background:#16a34a;color:#fff;width:28px;height:28px;display:inline-grid;place-items:center;border-radius:999px">3</b><br><b>Lihat Hasil</b><br>Otomatis muncul di <b>Riwayat Bulan</b> → Klik <b>Lihat</b> atau pilih di atas <b>Semua Bulan</b> → cek di tab <b>Laba Bersih</b></div>
+</div>
+<p style="margin:8px 0 0;font-size:12px;color:#15803d">Tidak perlu internet, tidak perlu password Shopee, aman tidak akan kebanned. Kalau bingung, cukup lakukan 1-2-3. File Excel bersih & laporan bisa di-download via tombol Export.</p>
+</div>
+
+<div class="container">
+<!-- UPLOAD -->
+<div id="tab-upload" class="tab">
+<div class="card">
+<h3>Upload Laporan Per Bulan</h3>
+<p class="small">Upload file <b>Income.sudah dilepas...</b> untuk tiap bulan. Sistem simpan per periode, pelanggan otomatis tergabung. 100% lokal.</p>
+<div class="grid2">
+<div>
+<label>Periode (YYYY-MM)</label>
+<input id="periode" type="month" value="2026-08">
+</div>
+<div>
+<label>File Shopee (.xlsx)</label>
+<input id="fileShopee" type="file" accept=".xlsx,.xls">
+</div>
+</div>
+<div style="margin-top:12px;display:flex;gap:8px">
+<button class="btn" id="btnUpload">Proses & Simpan Bulan Ini</button>
+<button class="btn2" id="btnExportLaba">Export Laporan Laba (.xlsx)</button>
+<button class="btn2" id="btnExportPelanggan">Export Pelanggan (.xlsx)</button>
+</div>
+<div id="uploadInfo" class="small" style="margin-top:8px"></div>
+</div>
+<div class="card">
+<h3>Riwayat Bulan Tersimpan <span class="small" style="font-weight:400">— klik header untuk sortir</span></h3>
+<div style="display:flex;gap:8px;margin-bottom:8px">
+<select id="sortMonths" style="width:auto"><option value="periode-asc">Sortir: Periode ↑</option><option value="periode-desc">Sortir: Periode ↓</option><option value="penghasilan-desc">Sortir: Penghasilan ↓</option><option value="penghasilan-asc">Sortir: Penghasilan ↑</option><option value="order-desc">Sortir: Order ↓</option></select>
+<button class="btn2" id="btnHapusSemua" style="padding:6px 12px;font-size:12px">Hapus Semua Bulan</button>
+</div>
+<table id="tblMonths"><thead><tr><th data-sort="periode" style="cursor:pointer">Periode ↕</th><th data-sort="order" style="cursor:pointer">Order ↕</th><th data-sort="penghasilan" style="cursor:pointer">Penghasilan ↕</th><th>Laba Bersih</th><th>Margin</th><th>Aksi</th></tr></thead><tbody></tbody></table>
+</div>
+<div class="card" style="border:2px dashed #0ea5e9;background:#f0f9ff">
+<h3>Database untuk PC Lain — Backup & Restore</h3>
+<p class="small">Database tersimpan di <b>localStorage</b> (per browser) + <b>file</b> offline. Untuk pindah PC, pakai Backup.</p>
+<div style="display:flex;gap:8px;flex-wrap:wrap">
+<button class="btn" id="btnBackup" style="background:#0ea5e9">⬇ Backup Database (download .json)</button>
+<label class="btn2" style="cursor:pointer;padding:8px 14px">⬆ Restore Database <input id="fileRestore" type="file" accept=".json" style="display:none"></label>
+<button class="btn2" id="btnCopyInfo">Info Manual Copy</button>
+</div>
+<div id="backupInfo" class="small" style="margin-top:8px"></div>
+<div id="manualInfo" class="small" style="display:none;margin-top:8px;background:#fff;padding:8px;border-radius:8px;border:1px solid #e0f2fe">
+<b>Manual (tanpa backup):</b> Copy folder <code>C:\shopee-recon\data</code> ke PC lain di lokasi sama, atau copy file backup <code>.json</code> via Flashdisk/Google Drive.<br>
+- File PC: <code>data/hpp.json</code>, <code>data/pelanggan.json</code>, <code>data/months/*.xlsx</code><br>
+- Browser: Backup .json ini sudah termasuk semua bulan + HPP + pelanggan — cukup Restore di PC lain.
+</div>
+</div>
+</div>
+
+<!-- LABA -->
+<div id="tab-laba" class="tab" style="display:none">
+<div class="card">
+<h3>Laporan Penghasilan - Beban (Laba Bersih)</h3>
+<div class="kpi" id="kpiLaba"></div>
+<div class="grid2" style="margin-top:14px">
+<div><canvas id="chartLaba"></canvas></div>
+<div><canvas id="chartBeban"></canvas></div>
+</div>
+<small>Penghasilan = Total Penghasilan (kolom Shopee). Laba Bersih = Penghasilan - HPP (HPP dikosongkan). Beban Shopee detail di bawah diambil langsung dari sheet Penghasilan.</small>
+</div>
+<div class="card">
+<h3>Rincian Beban (dari sheet Penghasilan)</h3>
+<div class="kpi" id="kpiBeban" style="grid-template-columns:repeat(5,1fr)"></div>
+<table id="tblBeban" style="margin-top:12px"><thead><tr><th>Jenis Beban</th><th>Total (Rp)</th><th>% dari Penghasilan</th></tr></thead><tbody></tbody></table>
+<small class="small">Beban Affiliasi/KMS = Biaya Komisi AMS + Biaya Kampanye &nbsp;|&nbsp; Beban Gratis Ongkir = Biaya Gratis Ongkir XTRA &nbsp;|&nbsp; Beban Platform = Admin + Proses + Pembayaran + Transaksi</small>
+</div>
+<div class="card">
+<h3>Rincian Laba per Produk</h3>
+<div style="max-height:380px;overflow:auto;border:1px solid #e2e8f0;border-radius:8px">
+<table id="tblLabaProduk"><thead><tr><th>Produk</th><th>Trx</th><th>Penghasilan</th><th>HPP</th><th>Laba</th><th>Margin</th></tr></thead><tbody></tbody></table>
+</div>
+</div>
+<div class="card">
+<h3>Rincian per Order (dengan HPP & Laba)</h3>
+<div style="max-height:400px;overflow:auto;border:1px solid #e2e8f0;border-radius:8px">
+<table id="tblLabaOrder"><thead><tr><th>No</th><th>No Pesanan</th><th>Waktu</th><th>Produk</th><th>Harga</th><th>Penghasilan</th><th>HPP</th><th>Laba</th></tr></thead><tbody></tbody></table>
+</div>
+</div>
+</div>
+
+<!-- HPP -->
+<div id="tab-hpp" class="tab" style="display:none">
+<div class="card">
+<h3>Database HPP per Produk</h3>
+<p class="small">Edit HPP (modal) tiap produk, disimpan lokal di <code>data/hpp.json</code>. Klik simpan setelah edit.</p>
+<div style="max-height:520px;overflow:auto;border:1px solid #e2e8f0;border-radius:8px">
+<table id="tblHpp"><thead><tr><th>ID</th><th>Nama Produk</th><th>HPP (Rp)</th><th>Satuan</th></tr></thead><tbody></tbody></table>
+</div>
+<div style="margin-top:10px;display:flex;gap:8px">
+<button class="btn" id="btnSimpanHpp">Simpan HPP</button>
+<button class="btn2" id="btnResetHpp">Muat Ulang</button>
+</div>
+<div id="hppInfo" class="small" style="margin-top:6px"></div>
+</div>
+</div>
+
+<!-- PELANGGAN -->
+<div id="tab-pelanggan" class="tab" style="display:none">
+<div class="card">
+<h3>Daftar Pelanggan (database rapi)</h3>
+<div style="display:flex;gap:8px;margin-bottom:10px">
+<input id="cariPelanggan" placeholder="Cari username / produk..." style="max-width:300px">
+<select id="sortPelanggan" style="max-width:180px"><option value="totalDilepas">Sort: Total Belanja</option><option value="totalOrder">Sort: Jumlah Order</option><option value="terakhir">Sort: Terakhir Belanja</option></select>
+<div class="small" style="margin-left:auto" id="infoPelanggan"></div>
+</div>
+<div style="max-height:540px;overflow:auto;border:1px solid #e2e8f0;border-radius:8px">
+<table id="tblPelanggan"><thead><tr><th>No</th><th>Username</th><th>Order</th><th>Total Dilepas</th><th>Pertama</th><th>Terakhir</th><th>Produk Favorit</th></tr></thead><tbody></tbody></table>
+</div>
+</div>
+</div>
+</div>
+
+<script>
+const HPP_DEFAULT = [
+  {"id":"5645966964","nama":"Susu Kambing Etawa CBM 200gr - Baik UntukTulang dan Sendi","hpp":0},
+  {"id":"3948886334","nama":"Sari Kurma Ajwa Plus Angkak CBM 350gr - Menaikkan Trombosit","hpp":0},
+  {"id":"48606298128","nama":"Citachanna Kapsul Ikan Gabus 50 Kapsul - Solusi Luka Cepat","hpp":0},
+  {"id":"40828836711","nama":"Kurma Khalas Saad Premium Original 500gr & 1kg","hpp":0},
+  {"id":"7373306057","nama":"Sari Kurma Ajwa Angkak CBM 350gr PROMO 1","hpp":0},
+  {"id":"29666977336","nama":"Sari Kurma Ajwa CBM ORIGINAL 350gr Plus Propolis","hpp":0},
+  {"id":"5940805406","nama":"Sari Kurma Ajwa CBM ORIGINAL 100% 350gr Plus Propolis","hpp":0},
+  {"id":"55505799708","nama":"Sari Kurma Ajwa Ekstrak Angkak CBM 350gr","hpp":0},
+  {"id":"46563335531","nama":"Kapsul Angkak Pukang Isi 50 kapsul","hpp":0},
+  {"id":"50956336497","nama":"KURMA TUNIS 500gr dan 1 kg - FREE SUSU","hpp":0},
+  {"id":"5343854077","nama":"CBM AJWA Madu Murni Kemasan Pouch dan Jerigen","hpp":0},
+  {"id":"11026392236","nama":"Susu Ettawa CBM Plus Gula Batu 200gr","hpp":0},
+  {"id":"6040891422","nama":"Madu Batuk ASYIFA Original 175 gram","hpp":0},
+  {"id":"57350026035","nama":"CBM AJWA Keladicer Keladi Tikus 50 Kapsul","hpp":0},
+  {"id":"26663469503","nama":"Minyak Kelapa VCO Halmahera CBM 120ML","hpp":0},
+  {"id":"56800016777","nama":"CBM Citagerd Madu Kunyit 175g Untuk Asam Lambung","hpp":0},
+  {"id":"51206329934","nama":"KURMA SUKARI Al Qosim Premium 500gr - 1kg","hpp":0},
+  {"id":"46455823486","nama":"Sari Kurma Ajwa CBM ORIGINAL 350gr Plus Propolis Isi 3","hpp":0},
+];
+let hppMap = new Map(HPP_DEFAULT.map(p=>[p.id,p.hpp].concat([[p.nama,p.hpp]])).flatMap(x=>[x]));
+// load from localStorage if exists
+const savedHpp = localStorage.getItem('hpp');
+if(savedHpp){ try{ const arr=JSON.parse(savedHpp); hppMap=new Map(arr.map(p=>[p.id,p.hpp])); HPP_DEFAULT.splice(0,HPP_DEFAULT.length,...arr); }catch{} }
+
+let ordersCache = [];
+let pelangganCache = [];
+let monthsCache = JSON.parse(localStorage.getItem('months')||'[]');
+// mulai dari nol - tidak ada seed, user upload sendiri
+// if(monthsCache.length===0){ monthsCache=[{periode:'2026-08',totalOrder:59,totalPenghasilan:2776643,labaBersih:993643}]; }
+
+function hitungLaba(orders){
+  let totalPenghasilan=0,totalHpp=0,totalBebanAll=0;
+  let beban={admin:0,proses:0,pembayaran:0,gratisOngkirXTRA:0,layananXTRA:0,kampanye:0,komisiAMS:0,isiSaldo:0,transaksi:0,ongkirJasa:0,gratisOngkirShopee:0};
+  const perProduk=new Map();
+  const detail=orders.map(o=>{
+    const hpp = hppMap.get(o.idProduk?.split(',')[0]) ?? hppMap.get(o.namaProduk) ?? 0;
+    const bAdmin=Math.abs(o.biayaAdmin||0), bProses=Math.abs(o.biayaProses||0), bBayar=Math.abs(o.biayaPembayaran||0);
+    const bGratisXTRA=Math.abs(o.biayaGratisOngkirXTRA||0), bLayananXTRA=Math.abs(o.biayaLayananPromoXTRA||0);
+    const bKampanye=Math.abs(o.biayaKampanye||0), bKomisiAMS=Math.abs(o.biayaKomisiAMS||0), bIsiSaldo=Math.abs(o.biayaIsiSaldo||0), bTransaksi=Math.abs(o.biayaTransaksi||0);
+    const bOngkirJasa=Math.abs(o.ongkosKirimKeJasa||0), bGratisOngkir=Math.abs(o.gratisOngkirShopee||0);
+    const bebanShopee=bAdmin+bProses+bBayar+bGratisXTRA+bLayananXTRA+bKampanye+bKomisiAMS+bIsiSaldo+bTransaksi;
+    const laba=o.totalPenghasilan - hpp;
+    totalPenghasilan+=o.totalPenghasilan; totalHpp+=hpp; totalBebanAll+=bebanShopee;
+    beban.admin+=bAdmin; beban.proses+=bProses; beban.pembayaran+=bBayar; beban.gratisOngkirXTRA+=bGratisXTRA; beban.layananXTRA+=bLayananXTRA;
+    beban.kampanye+=bKampanye; beban.komisiAMS+=bKomisiAMS; beban.isiSaldo+=bIsiSaldo; beban.transaksi+=bTransaksi; beban.ongkirJasa+=bOngkirJasa; beban.gratisOngkirShopee+=bGratisOngkir;
+    if(!perProduk.has(o.namaProduk)) perProduk.set(o.namaProduk,{c:0,p:0,h:0,l:0});
+    const pp=perProduk.get(o.namaProduk); pp.c++; pp.p+=o.totalPenghasilan; pp.h+=hpp; pp.l+=laba;
+    return {...o,hpp,laba,bebanShopee};
+  });
+  return {ringkasan:{totalPenghasilan,totalHpp,labaBersih:totalPenghasilan-totalHpp,margin:totalPenghasilan?((totalPenghasilan-totalHpp)/totalPenghasilan*100).toFixed(1):0,totalOrder:orders.length,totalBebanAll,beban,bebanAffiliate:beban.komisiAMS+beban.kampanye,bebanGratisOngkir:beban.gratisOngkirXTRA,bebanPlatform:beban.admin+beban.proses+beban.pembayaran+beban.transaksi},perProduk,detail};
+}
+function buildPelanggan(orders){
+  const map=new Map();
+  orders.forEach(o=>{
+    const k=o.usernamePembeli||'tanpa_nama';
+    if(!map.has(k)) map.set(k,{username:k,totalOrder:0,totalDilepas:0,totalBelanja:0,pertama:o.waktuPesanan,terakhir:o.waktuPesanan,produk:{}});
+    const p=map.get(k); p.totalOrder++; p.totalDilepas+=o.totalPenghasilan; p.totalBelanja+=o.hargaProduk;
+    if(o.waktuPesanan<p.pertama) p.pertama=o.waktuPesanan; if(o.waktuPesanan>p.terakhir) p.terakhir=o.waktuPesanan;
+    p.produk[o.namaProduk]=(p.produk[o.namaProduk]||0)+1;
+  });
+  return Array.from(map.values()).sort((a,b)=>b.totalDilepas-a.totalDilepas);
+}
+
+function getOrdersForView(periode){
+  if(periode==='all'){
+    let all=[];
+    monthsCache.forEach(m=>{ const key='orders_'+m.periode; const arr=JSON.parse(localStorage.getItem(key)||'[]'); all=all.concat(arr); });
+    // fallback jika belum ada per-bulan tapi ada lastOrders (upload lama)
+    if(all.length===0 && localStorage.getItem('lastOrders')){ try{ all=JSON.parse(localStorage.getItem('lastOrders')); }catch{} }
+    return all;
+  } else {
+    const arr=JSON.parse(localStorage.getItem('orders_'+periode)||'[]');
+    if(arr.length>0) return arr;
+    // fallback: jika view periode yang sedang di-input belum disimpan, pakai lastOrders jika periode cocok
+    if(localStorage.getItem('lastOrders') && monthsCache.some(m=>m.periode===periode)) return JSON.parse(localStorage.getItem('lastOrders'));
+    return [];
+  }
+}
+async function loadInitial(){
+  // rebuild view selector
+  const sel=document.getElementById('viewPeriode');
+  if(sel){
+    const cur=sel.value;
+    sel.innerHTML='<option value="all">Semua Bulan ('+monthsCache.length+' bulan)</option>' + monthsCache.map(m=>`<option value="${m.periode}">${m.periode} — ${m.totalOrder} order</option>`).join('');
+    if(cur) sel.value=cur;
+  }
+  // load sesuai view
+  const view=document.getElementById('viewPeriode')?.value || 'all';
+  ordersCache = getOrdersForView(view);
+  pelangganCache = buildPelanggan(ordersCache);
+  renderAll();
+  if(monthsCache.length===0){
+    document.getElementById('uploadInfo').textContent = 'Sistem kosong — silakan upload laporan Shopee per bulan untuk memulai. Input sesuai bulan di kolom Periode (YYYY-MM) di atas.';
+  } else {
+    document.getElementById('uploadInfo').textContent = `Menampilkan ${view==='all'?'Semua Bulan':view}: ${ordersCache.length} order`;
+  }
+}
+let monthsSortKey='periode', monthsSortDir='asc';
+function hapusBulan(periode){
+  if(!confirm('Hapus data bulan '+periode+'?')) return;
+  monthsCache=monthsCache.filter(m=>m.periode!==periode);
+  localStorage.setItem('months', JSON.stringify(monthsCache));
+  localStorage.removeItem('orders_'+periode);
+  if(localStorage.getItem('lastOrders')){
+    try{ const last=JSON.parse(localStorage.getItem('lastOrders')); if(last.length>0 && last[0].waktuPesanan?.startsWith(periode)) localStorage.removeItem('lastOrders'); }catch{}
+  }
+  // jika view sedang menampilkan periode yang dihapus, ganti ke all
+  const view=document.getElementById('viewPeriode')?.value;
+  if(view===periode) {
+    document.getElementById('viewPeriode').value='all';
+    ordersCache=getOrdersForView('all');
+  } else {
+    ordersCache=getOrdersForView(document.getElementById('viewPeriode')?.value||'all');
+  }
+  pelangganCache=buildPelanggan(ordersCache);
+  renderAll();
+}
+function renderMonths(){
+  let sorted=[...monthsCache];
+  const key=monthsSortKey, dir=monthsSortDir;
+  sorted.sort((a,b)=>{
+    let va=a[key==='periode'?'periode':key==='order'?'totalOrder':'totalPenghasilan'], vb=b[key==='periode'?'periode':key==='order'?'totalOrder':'totalPenghasilan'];
+    if(key==='periode'){ va=a.periode; vb=b.periode; }
+    if(dir==='asc') return va>vb?1:va<vb?-1:0;
+    else return va<vb?1:va>vb?-1:0;
+  });
+  const tbody=document.querySelector('#tblMonths tbody');
+  tbody.innerHTML = sorted.map(m=>`<tr><td>${m.periode}</td><td>${m.totalOrder}</td><td>Rp ${m.totalPenghasilan.toLocaleString('id-ID')}</td><td>Rp ${m.labaBersih.toLocaleString('id-ID')}</td><td>${(m.labaBersih/m.totalPenghasilan*100).toFixed(1)}%</td><td><button class="btn2" onclick="hapusBulan('${m.periode}')" style="padding:4px 8px;font-size:12px;background:#dc2626">Hapus</button> <button class="btn2" onclick="document.getElementById('periode').value='${m.periode}';document.getElementById('viewPeriode').value='${m.periode}';ordersCache=getOrdersForView('${m.periode}');pelangganCache=buildPelanggan(ordersCache);renderAll();document.querySelector('[data-tab=laba]').click();" style="padding:4px 8px;font-size:12px">Lihat</button></td></tr>`).join('') || '<tr><td colspan=6 style="text-align:center;color:#64748b">Belum ada bulan</td></tr>';
+}
+let chartLabaInst=null, chartBebanInst=null;
+function renderLaba(){
+  if(ordersCache.length===0){
+    document.getElementById('kpiLaba').innerHTML='<div style="grid-column:1/-1;color:#64748b">Belum ada data untuk periode ini — upload dulu</div>';
+    document.getElementById('kpiBeban').innerHTML='';
+    document.querySelector('#tblBeban tbody').innerHTML='<tr><td colspan=3 style="text-align:center;color:#64748b">Belum ada beban</td></tr>';
+    document.querySelector('#tblLabaProduk tbody').innerHTML='<tr><td colspan=6 style="text-align:center;color:#64748b">Belum ada produk</td></tr>';
+    document.querySelector('#tblLabaOrder tbody').innerHTML='<tr><td colspan=8 style="text-align:center;color:#64748b">Belum ada order</td></tr>';
+    try{ if(chartLabaInst) chartLabaInst.destroy(); if(chartBebanInst) chartBebanInst.destroy(); }catch{}
+    return;
+  }
+  const r=hitungLaba(ordersCache);
+  document.getElementById('kpiLaba').innerHTML = `<div><span>Penghasilan</span><b>Rp ${r.ringkasan.totalPenghasilan.toLocaleString('id-ID')}</b></div><div><span>HPP Total</span><b>Rp ${r.ringkasan.totalHpp.toLocaleString('id-ID')}</b></div><div><span>Laba Bersih</span><b style="color:#16a34a">Rp ${r.ringkasan.labaBersih.toLocaleString('id-ID')}</b></div><div><span>Margin</span><b>${r.ringkasan.margin}%</b></div>`;
+  const b=r.ringkasan.beban;
+  const total=r.ringkasan.totalPenghasilan||1;
+  document.getElementById('kpiBeban').innerHTML = `<div><span>Gratis Ongkir XTRA</span><b>Rp ${b.gratisOngkirXTRA.toLocaleString('id-ID')}</b></div><div><span>Affiliate/KMS (AMS)</span><b>Rp ${b.komisiAMS.toLocaleString('id-ID')}</b></div><div><span>Kampanye</span><b>Rp ${b.kampanye.toLocaleString('id-ID')}</b></div><div><span>Isi Saldo</span><b>Rp ${b.isiSaldo.toLocaleString('id-ID')}</b></div><div><span>Platform</span><b>Rp ${(b.admin+b.proses+b.pembayaran+b.transaksi).toLocaleString('id-ID')}</b></div>`;
+  document.querySelector('#tblBeban tbody').innerHTML = [
+    ['Biaya Administrasi (PPN 11%)',b.admin],
+    ['Biaya Proses Pesanan',b.proses],
+    ['Biaya Pembayaran',b.pembayaran],
+    ['Biaya Transaksi',b.transaksi],
+    ['Biaya Gratis Ongkir XTRA',b.gratisOngkirXTRA],
+    ['Biaya Layanan Promo XTRA',b.layananXTRA],
+    ['Biaya Kampanye',b.kampanye],
+    ['Biaya Komisi AMS (Affiliate/KMS)',b.komisiAMS],
+    ['Biaya Isi Saldo Otomatis',b.isiSaldo],
+    ['Ongkos Kirim ke Jasa Kirim',b.ongkirJasa],
+    ['Gratis Ongkir dari Shopee',b.gratisOngkirShopee],
+    ['TOTAL Beban Shopee',r.ringkasan.totalBebanAll],
+  ].map(([n,v])=>`<tr><td>${n}</td><td>Rp ${v.toLocaleString('id-ID')}</td><td>${(v/total*100).toFixed(1)}%</td></tr>`).join('');
+  document.querySelector('#tblLabaProduk tbody').innerHTML = Array.from(r.perProduk.entries()).map(([nama,v])=>`<tr><td>${nama}</td><td>${v.c}</td><td>Rp ${v.p.toLocaleString('id-ID')}</td><td>Rp ${v.h.toLocaleString('id-ID')}</td><td style="color:${v.l>0?'#16a34a':'#dc2626'}">Rp ${v.l.toLocaleString('id-ID')}</td><td>${(v.l/v.p*100).toFixed(1)}%</td></tr>`).join('');
+  document.querySelector('#tblLabaOrder tbody').innerHTML = r.detail.map((d,i)=>`<tr><td>${i+1}</td><td>${d.noPesanan}</td><td>${d.waktuPesanan}</td><td style="max-width:220px;overflow:hidden;text-overflow:ellipsis" title="${d.namaProduk}">${d.namaProduk}</td><td>Rp ${d.hargaProduk.toLocaleString('id-ID')}</td><td>Rp ${d.totalPenghasilan.toLocaleString('id-ID')}</td><td>Rp ${d.hpp.toLocaleString('id-ID')}</td><td style="color:${d.laba>0?'#16a34a':'#dc2626'}">Rp ${d.laba.toLocaleString('id-ID')}</td></tr>`).join('');
+  try{
+    if(chartLabaInst) chartLabaInst.destroy(); if(chartBebanInst) chartBebanInst.destroy();
+    chartLabaInst=new Chart(document.getElementById('chartLaba'),{type:'doughnut',data:{labels:['Laba Bersih','HPP','Beban Platform','Beban Affiliate/KMS','Beban Gratis Ongkir','Lainnya'],datasets:[{data:[r.ringkasan.labaBersih,r.ringkasan.totalHpp,r.ringkasan.bebanPlatform,r.ringkasan.bebanAffiliate,r.ringkasan.bebanGratisOngkir, Math.max(0,r.ringkasan.totalBebanAll - r.ringkasan.bebanPlatform - r.ringkasan.bebanAffiliate - r.ringkasan.bebanGratisOngkir)],backgroundColor:['#16a34a','#0ea5e9','#f59e0b','#ee4d2d','#8b5cf6','#64748b']}]}});
+    chartBebanInst=new Chart(document.getElementById('chartBeban'),{type:'bar',data:{labels:Array.from(r.perProduk.keys()).slice(0,6).map(s=>s.slice(0,18)),datasets:[{label:'Laba',data:Array.from(r.perProduk.values()).slice(0,6).map(v=>v.l),backgroundColor:'#16a34a'}]},options:{plugins:{legend:{display:false}}}});
+  }catch(e){ console.error(e); }
+}
+function renderHpp(){
+  const tbody=document.querySelector('#tblHpp tbody');
+  tbody.innerHTML = HPP_DEFAULT.map(p=>`<tr><td>${p.id}</td><td>${p.nama}</td><td><input type="number" value="${p.hpp}" data-id="${p.id}" style="width:120px"></td><td>${p.satuan||'pcs'}</td></tr>`).join('');
+}
+function renderPelanggan(){
+  let list=[...pelangganCache];
+  const q=document.getElementById('cariPelanggan').value.toLowerCase();
+  if(q) list=list.filter(p=>p.username.toLowerCase().includes(q) || Object.keys(p.produk).join(' ').toLowerCase().includes(q));
+  const sort=document.getElementById('sortPelanggan').value;
+  if(sort==='totalOrder') list.sort((a,b)=>b.totalOrder-a.totalOrder);
+  else if(sort==='terakhir') list.sort((a,b)=>b.terakhir.localeCompare(a.terakhir));
+  else list.sort((a,b)=>b.totalDilepas-a.totalDilepas);
+  document.getElementById('infoPelanggan').textContent = `${list.length} pelanggan`;
+  document.querySelector('#tblPelanggan tbody').innerHTML = list.map((p,i)=>`<tr><td>${i+1}</td><td>${p.username}</td><td>${p.totalOrder}</td><td>Rp ${p.totalDilepas.toLocaleString('id-ID')}</td><td>${p.pertama}</td><td>${p.terakhir}</td><td>${Object.entries(p.produk).sort((a,b)=>b[1]-a[1])[0]?.[0]?.slice(0,30)||'-'}</td></tr>`).join('');
+}
+function renderAll(){
+  const sel=document.getElementById('viewPeriode');
+  if(sel){
+    const cur=sel.value;
+    sel.innerHTML='<option value="all">Semua Bulan ('+monthsCache.length+' bulan)</option>' + monthsCache.map(m=>`<option value="${m.periode}">${m.periode} — ${m.totalOrder} order</option>`).join('');
+    if(cur && [...sel.options].some(o=>o.value===cur)) sel.value=cur;
+  }
+  renderMonths(); renderLaba(); renderHpp(); renderPelanggan();
+}
+document.getElementById('btnViewPeriode')?.addEventListener('click',()=>{
+  const view=document.getElementById('viewPeriode').value;
+  ordersCache=getOrdersForView(view);
+  pelangganCache=buildPelanggan(ordersCache);
+  renderAll();
+  document.getElementById('uploadInfo').textContent = `Menampilkan ${view==='all'?'Semua Bulan ('+monthsCache.length+' bulan)':view}: ${ordersCache.length} order — Penghasilan Rp ${ordersCache.reduce((a,b)=>a+b.totalPenghasilan,0).toLocaleString('id-ID')}`;
+});
+document.getElementById('viewPeriode')?.addEventListener('change',()=>{
+  const view=document.getElementById('viewPeriode').value;
+  ordersCache=getOrdersForView(view);
+  pelangganCache=buildPelanggan(ordersCache);
+  renderAll();
+  document.getElementById('uploadInfo').textContent = `Menampilkan ${view==='all'?'Semua Bulan':view}: ${ordersCache.length} order`;
+});
+document.getElementById('sortMonths')?.addEventListener('change',(e)=>{
+  const [k,d]=e.target.value.split('-');
+  monthsSortKey=k; monthsSortDir=d; renderMonths();
+});
+document.querySelectorAll('#tblMonths thead th[data-sort]')?.forEach(th=>{
+  th.addEventListener('click',()=>{
+    const k=th.dataset.sort;
+    if(monthsSortKey===k) monthsSortDir=monthsSortDir==='asc'?'desc':'asc';
+    else { monthsSortKey=k; monthsSortDir='asc'; }
+    document.getElementById('sortMonths').value=k+'-'+monthsSortDir;
+    renderMonths();
+  });
+});
+document.getElementById('btnHapusSemua')?.addEventListener('click',()=>{
+  if(!confirm('Hapus SEMUA bulan?')) return;
+  monthsCache.forEach(m=>localStorage.removeItem('orders_'+m.periode));
+  monthsCache=[]; localStorage.setItem('months',JSON.stringify(monthsCache)); localStorage.removeItem('lastOrders');
+  ordersCache=[]; pelangganCache=[];
+  document.getElementById('viewPeriode').value='all';
+  renderAll();
+});
+
+// tab switching
+document.querySelectorAll('nav button').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('nav button').forEach(x=>x.classList.remove('active')); b.classList.add('active');
+  document.querySelectorAll('.tab').forEach(t=>t.style.display='none');
+  document.getElementById('tab-'+b.dataset.tab).style.display='block';
+}));
+
+// upload
+document.getElementById('btnUpload').addEventListener('click', async()=>{
+  const f=document.getElementById('fileShopee').files[0];
+  const periode=document.getElementById('periode').value;
+  if(!f || !periode){ alert('Pilih periode dan file'); return; }
+  const buf=await f.arrayBuffer();
+  const wb=XLSX.read(buf,{type:'array'});
+  // pakai fungsi parseShopeeIncome dari module (sudah ada) - tapi untuk browser kita parse manual
+  const sheet=wb.Sheets['Penghasilan'];
+  const rows=XLSX.utils.sheet_to_json(sheet,{header:1,defval:''});
+  const hIdx=rows.findIndex(r=>r.includes('No. Pesanan') && r.includes('Total Penghasilan'));
+  const headers=rows[hIdx]; const idx={}; headers.forEach((h,i)=>idx[h]=i);
+  // sku map
+  const skuMap=new Map();
+  rows.slice(hIdx+1).forEach(r=>{ if(r[idx['Lihat berdasarkan']]!=='Sku') return; const id=String(r[idx['No. Pesanan']]).trim(); if(!skuMap.has(id)) skuMap.set(id,[]); skuMap.get(id).push({id:r[idx['ID Produk']],nama:r[idx['Nama Produk']]}) });
+  const orders=[];
+  rows.slice(hIdx+1).forEach(r=>{ if(r[idx['Lihat berdasarkan']]!=='Order') return; const id=String(r[idx['No. Pesanan']]).trim(); if(!id) return; const sku=skuMap.get(id)||[]; orders.push({noPesanan:id,waktuPesanan:r[idx['Waktu Pesanan Dibuat']],tanggalDilepas:r[idx['Tanggal Dana Dilepaskan']],usernamePembeli:r[idx['Username (Pembeli)']],jasaKirim:r[idx['Jasa Kirim']],namaProduk:sku.map(s=>s.nama).join(' | ')||'-',idProduk:sku.map(s=>s.id).join(','),hargaProduk:Number(r[idx['Harga Produk']]||0),totalPenghasilan:Number(r[idx['Total Penghasilan']]||0),ongkosKirimKeJasa:Number(r[idx['Ongkos Kirim yang Dibayarkan ke Jasa Kirim']]||0),gratisOngkirShopee:Number(r[idx['Gratis Ongkir dari Shopee']]||0),biayaAdmin:Number(r[idx['Biaya Administrasi (termasuk PPN 11%)']]||0),biayaProses:Number(r[idx['Biaya Proses Pesanan']]||0),biayaPembayaran:Number(r[idx['Biaya Pembayaran']]||0),biayaGratisOngkirXTRA:Number(r[idx['Biaya Gratis Ongkir XTRA - Ukuran Biasa (Kategori E)']]||0),biayaTransaksi:Number(r[idx['Biaya Transaksi']]||0),biayaLayananPromoXTRA:Number(r[idx['Biaya Layanan Promo XTRA']]||0),biayaKampanye:Number(r[idx['Biaya Kampanye']]||0),biayaKomisiAMS:Number(r[idx['Biaya Komisi AMS']]||0),biayaIsiSaldo:Number(r[idx['Biaya Isi Saldo Otomatis (dari Penghasilan)']]||0)}) });
+  ordersCache=orders;
+  pelangganCache=buildPelanggan(orders);
+  // simpan per bulan (sesuai bulan yang diinginkan) + agregat
+  const hppNeeded = orders.reduce((a,b)=>a+(hppMap.get(b.idProduk?.split(',')[0])??0),0);
+  const labaBersih = orders.reduce((a,b)=>a+b.totalPenghasilan,0) - hppNeeded;
+  monthsCache = monthsCache.filter(m=>m.periode!==periode);
+  monthsCache.push({periode,totalOrder:orders.length,totalPenghasilan:orders.reduce((a,b)=>a+b.totalPenghasilan,0),labaBersih});
+  monthsCache.sort((a,b)=>a.periode.localeCompare(b.periode));
+  localStorage.setItem('months',JSON.stringify(monthsCache));
+  localStorage.setItem('orders_'+periode, JSON.stringify(orders));
+  localStorage.setItem('lastOrders',JSON.stringify(orders));
+  // update view selector
+  const sel=document.getElementById('viewPeriode');
+  if(sel){
+    sel.innerHTML='<option value="all">Semua Bulan ('+monthsCache.length+' bulan)</option>' + monthsCache.map(m=>`<option value="${m.periode}">${m.periode} — ${m.totalOrder} order</option>`).join('');
+    sel.value=periode;
+  }
+  // tampilkan sesuai bulan yang diinput
+  ordersCache=orders; pelangganCache=buildPelanggan(ordersCache);
+  document.getElementById('uploadInfo').textContent = `✅ ${orders.length} order periode ${periode} diproses & disimpan. Tampilkan: ${periode}`;
+  renderAll();
+  alert('Berhasil! Data '+periode+' tersimpan. Sekarang bisa lihat Semua Bulan atau per bulan via dropdown di atas.');
+});
+
+document.getElementById('btnSimpanHpp').addEventListener('click',()=>{
+  document.querySelectorAll('#tblHpp input').forEach(inp=>{
+    const id=inp.dataset.id; const val=Number(inp.value)||0;
+    const p=HPP_DEFAULT.find(x=>x.id===id); if(p) p.hpp=val; hppMap.set(id,val); hppMap.set(p.nama,val);
+  });
+  localStorage.setItem('hpp',JSON.stringify(HPP_DEFAULT));
+  document.getElementById('hppInfo').textContent='✅ HPP tersimpan lokal';
+  renderLaba();
+});
+document.getElementById('btnResetHpp').addEventListener('click',()=>{ localStorage.removeItem('hpp'); location.reload(); });
+document.getElementById('cariPelanggan').addEventListener('input',renderPelanggan);
+document.getElementById('sortPelanggan').addEventListener('change',renderPelanggan);
+document.getElementById('btnExportLaba').addEventListener('click',()=>{
+  if(ordersCache.length===0){ alert('Upload dulu atau pilih periode yang ada data'); return; }
+  const view=document.getElementById('viewPeriode')?.value||document.getElementById('periode').value;
+  const r=hitungLaba(ordersCache);
+  const b=r.ringkasan.beban;
+  const wb=XLSX.utils.book_new();
+  // Sheet 1: Ringkasan - rapi
+  const ringkas=[
+    ['LAPORAN LABA SHOPEE'],
+    ['Periode', view==='all'?'Semua Bulan ('+monthsCache.length+' bulan)':view],
+    ['Tanggal Export', new Date().toLocaleDateString('id-ID')],
+    [],
+    ['RINGKASAN', 'Rp'],
+    ['Total Order', r.ringkasan.totalOrder],
+    ['Total Penghasilan', r.ringkasan.totalPenghasilan],
+    ['Total HPP', r.ringkasan.totalHpp],
+    ['Laba Bersih (Penghasilan - HPP)', r.ringkasan.labaBersih],
+    ['Margin Laba', r.ringkasan.margin+'%'],
+    [],
+    ['BEBAN SHOPEE (dari sheet Penghasilan)', 'Rp'],
+    ['Beban Gratis Ongkir XTRA', b.gratisOngkirXTRA],
+    ['Beban Affiliate/KMS (Komisi AMS)', b.komisiAMS],
+    ['Beban Kampanye', b.kampanye],
+    ['Beban Isi Saldo Otomatis', b.isiSaldo],
+    ['Beban Platform (Admin+Proses+Pembayaran+Transaksi)', b.admin+b.proses+b.pembayaran+b.transaksi],
+    ['TOTAL Beban Shopee', r.ringkasan.totalBebanAll],
+  ];
+  const ws1=XLSX.utils.aoa_to_sheet(ringkas);
+  ws1['!cols']=[{wch:38},{wch:18}];
+  XLSX.utils.book_append_sheet(wb, ws1, 'Ringkasan');
+  // Sheet 2: Per Produk - penting saja
+  const perProduk=[
+    ['No','Nama Produk','Trx','Penghasilan','HPP','Laba','Margin'],
+    ...Array.from(r.perProduk.entries()).map(([nama,v],i)=>[i+1, nama, v.c, v.p, v.h, v.l, (v.l/v.p*100).toFixed(1)+'%'])
+  ];
+  const ws2=XLSX.utils.aoa_to_sheet(perProduk);
+  ws2['!cols']=[{wch:4},{wch:50},{wch:6},{wch:14},{wch:14},{wch:14},{wch:8}];
+  ws2['!autofilter']={ref:'A1:G1'}; ws2['!freeze']={xSplit:0,ySplit:1};
+  XLSX.utils.book_append_sheet(wb, ws2, 'Per Produk');
+  // Sheet 3: Per Order - penting saja, rapi
+  const perOrder=[
+    ['No','No. Pesanan','Waktu Pesan','Tgl Cair','Produk','Pembeli','Jasa Kirim','Total Penghasilan','Beban Shopee','HPP','Laba'],
+    ...r.detail.map((d,i)=>[i+1, d.noPesanan, d.waktuPesanan, d.tanggalDilepas, d.namaProduk, d.usernamePembeli, d.jasaKirim, d.totalPenghasilan, d.bebanShopee, d.hpp, d.laba])
+  ];
+  const ws3=XLSX.utils.aoa_to_sheet(perOrder);
+  ws3['!cols']=[{wch:4},{wch:16},{wch:12},{wch:12},{wch:40},{wch:16},{wch:14},{wch:14},{wch:12},{wch:10},{wch:12}];
+  ws3['!autofilter']={ref:'A1:K1'}; ws3['!freeze']={xSplit:0,ySplit:1};
+  XLSX.utils.book_append_sheet(wb, ws3, 'Per Order');
+  XLSX.writeFile(wb,`Laba_${view==='all'?'SemuaBulan':view}.xlsx`);
+});
+document.getElementById('btnExportPelanggan').addEventListener('click',()=>{
+  if(pelangganCache.length===0){ alert('Belum ada pelanggan — upload dulu'); return; }
+  const view=document.getElementById('viewPeriode')?.value||'all';
+  const data=[
+    ['No','Username','Jml Order','Total Dilepas','Rata-rata','Pertama','Terakhir','Produk Favorit'],
+    ...pelangganCache.map((p,i)=>[i+1, p.username, p.totalOrder, p.totalDilepas, Math.round(p.totalDilepas/p.totalOrder), p.pertama, p.terakhir, Object.entries(p.produk).sort((a,b)=>b[1]-a[1])[0]?.[0]||'-'])
+  ];
+  const ws=XLSX.utils.aoa_to_sheet(data);
+  ws['!cols']=[{wch:4},{wch:18},{wch:9},{wch:14},{wch:12},{wch:12},{wch:12},{wch:35}];
+  ws['!autofilter']={ref:'A1:H1'}; ws['!freeze']={xSplit:0,ySplit:1};
+  const wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,'Pelanggan');
+  XLSX.writeFile(wb,`Pelanggan_${view==='all'?'SemuaBulan':view}.xlsx`);
+});
+document.getElementById('btnBackup')?.addEventListener('click',()=>{
+  const data={
+    _info:'Backup Database Shopee - shopee-recon',
+    tanggal:new Date().toISOString(),
+    hpp: JSON.parse(localStorage.getItem('hpp')||'null') || HPP_DEFAULT,
+    months: monthsCache,
+    orders: {}
+  };
+  monthsCache.forEach(m=>{ data.orders[m.periode]=JSON.parse(localStorage.getItem('orders_'+m.periode)||'[]'); });
+  if(Object.keys(data.orders).length===0 && localStorage.getItem('lastOrders')) data.orders['last']=JSON.parse(localStorage.getItem('lastOrders'));
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='BACKUP_shopee_'+new Date().toISOString().slice(0,10)+'.json'; a.click();
+  document.getElementById('backupInfo').textContent='✅ Backup terdownload — pindahkan file .json ke PC lain lalu Restore';
+});
+document.getElementById('fileRestore')?.addEventListener('change', async(e)=>{
+  const f=e.target.files[0]; if(!f) return;
+  const txt=await f.text();
+  try{
+    const data=JSON.parse(txt);
+    if(data.hpp) localStorage.setItem('hpp', JSON.stringify(data.hpp));
+    if(data.months) localStorage.setItem('months', JSON.stringify(data.months));
+    if(data.orders) Object.entries(data.orders).forEach(([k,v])=> localStorage.setItem(k==='last'?'lastOrders':'orders_'+k, JSON.stringify(v)));
+    alert('✅ Restore berhasil '+ (data.months?.length||0)+' bulan. Reload...');
+    location.reload();
+  }catch(err){ alert('Gagal restore: '+err.message); }
+});
+document.getElementById('btnCopyInfo')?.addEventListener('click',()=>{
+  const el=document.getElementById('manualInfo'); el.style.display=el.style.display==='none'?'block':'none';
+});
+document.getElementById('btnPanduan')?.addEventListener('click',()=>{
+  const el=document.getElementById('panduanAwam'); el.style.display=el.style.display==='none'?'block':'none';
+  if(el.style.display==='block') el.scrollIntoView({behavior:'smooth'});
+});
+
+loadInitial();
+</script>
+</body>
+</html>

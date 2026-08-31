@@ -1,0 +1,25 @@
+{
+  "_keterangan": "HPP dikosongkan - akan diisi nanti dari database produk Shopee",
+  "updated": "2026-08-31",
+  "status": "KOSONG - menunggu update produk Shopee",
+  "produk": [
+    { "id": "5645966964", "nama": "Susu Kambing Etawa CBM 200gr - Baik UntukTulang dan Sendi", "hpp": 0, "satuan": "pcs", "status": "belum diisi" },
+    { "id": "3948886334", "nama": "Sari Kurma Ajwa Plus Angkak CBM 350gr - Menaikkan Trombosit", "hpp": 0, "satuan": "pcs", "status": "belum diisi" },
+    { "id": "48606298128", "nama": "Citachanna Kapsul Ikan Gabus 50 Kapsul - Solusi Luka Cepat", "hpp": 0, "satuan": "pcs", "status": "belum diisi" },
+    { "id": "40828836711", "nama": "Kurma Khalas Saad Premium Original 500gr & 1kg", "hpp": 0, "satuan": "pcs", "status": "belum diisi" },
+    { "id": "7373306057", "nama": "Sari Kurma Ajwa Angkak CBM 350gr PROMO 1", "hpp": 0, "satuan": "pcs", "status": "belum diisi" },
+    { "id": "29666977336", "nama": "Sari Kurma Ajwa CBM ORIGINAL 350gr Plus Propolis", "hpp": 0, "satuan": "pcs", "status": "belum diisi" },
+    { "id": "5940805406", "nama": "Sari Kurma Ajwa CBM ORIGINAL 100% 350gr Plus Propolis", "hpp": 0, "satuan": "pcs", "status": "belum diisi" },
+    { "id": "55505799708", "nama": "Sari Kurma Ajwa Ekstrak Angkak CBM 350gr", "hpp": 0, "satuan": "pcs", "status": "belum diisi" },
+    { "id": "46563335531", "nama": "Kapsul Angkak Pukang Isi 50 kapsul", "hpp": 0, "satuan": "pcs", "status": "belum diisi" },
+    { "id": "50956336497", "nama": "KURMA TUNIS 500gr dan 1 kg - FREE SUSU", "hpp": 0, "satuan": "pcs", "status": "belum diisi" },
+    { "id": "5343854077", "nama": "CBM AJWA Madu Murni Kemasan Pouch dan Jerigen", "hpp": 0, "satuan": "pcs", "status": "belum diisi" },
+    { "id": "11026392236", "nama": "Susu Ettawa CBM Plus Gula Batu 200gr", "hpp": 0, "satuan": "pcs", "status": "belum diisi" },
+    { "id": "6040891422", "nama": "Madu Batuk ASYIFA Original 175 gram", "hpp": 0, "satuan": "pcs", "status": "belum diisi" },
+    { "id": "57350026035", "nama": "CBM AJWA Keladicer Keladi Tikus 50 Kapsul", "hpp": 0, "satuan": "pcs", "status": "belum diisi" },
+    { "id": "26663469503", "nama": "Minyak Kelapa VCO Halmahera CBM 120ML", "hpp": 0, "satuan": "pcs", "status": "belum diisi" },
+    { "id": "56800016777", "nama": "CBM Citagerd Madu Kunyit 175g Untuk Asam Lambung", "hpp": 0, "satuan": "pcs", "status": "belum diisi" },
+    { "id": "51206329934", "nama": "KURMA SUKARI Al Qosim Premium 500gr - 1kg", "hpp": 0, "satuan": "pcs", "status": "belum diisi" },
+    { "id": "46455823486", "nama": "Sari Kurma Ajwa CBM ORIGINAL 350gr Plus Propolis Isi 3", "hpp": 0, "satuan": "pcs", "status": "belum diisi" }
+  ]
+}

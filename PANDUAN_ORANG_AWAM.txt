@@ -1,0 +1,39 @@
+PANDUAN SHOPER RECON UNTUK ORANG AWAM
+=====================================
+Sistem 100% offline, aman, tidak perlu internet
+
+3 LANGKAH SAJA:
+
+1. AMBIL LAPORAN SHOPEE
+   - Buka Google Chrome -> ketik seller.shopee.co.id
+   - Login toko cbmajwastore
+   - Klik menu KEUANGAN -> PENGHASILAN
+   - Pilih bulan (misal 1-30 September)
+   - Klik tombol EXPORT -> akan terdownload file Income.xlsx
+
+2. UPLOAD DI APLIKASI
+   - Buka file app.html (double klik)
+   - Di bagian atas pilih BULAN (misal 2026-09)
+   - Klik PILIH FILE -> cari file Income.xlsx tadi
+   - Klik PROSES & SIMPAN BULAN INI
+   - Tunggu 2 detik -> muncul "Berhasil"
+
+3. LIHAT HASIL
+   - Di bawah langsung muncul di RIWAYAT BULAN TERSIMPAN
+   - Klik LIHAT untuk lihat bulan itu saja
+   - Atau pilih SEMUA BULAN di atas untuk lihat gabungan
+   - Klik tab LABA BERSIH untuk lihat untung/rugi
+   - Klik tab DAFTAR PELANGGAN untuk lihat pelanggan
+
+TOMBOL PENTING:
+- HAPUS : hapus bulan yang salah input
+- SORTIR : klik untuk urutkan dari terbaru/terlama
+- EXPORT : download laporan jadi Excel rapi
+- BACKUP : untuk pindah ke laptop lain (klik Backup, simpan file, bawa ke laptop baru klik Restore)
+
+JIKA BINGUNG:
+- Tidak perlu isi HPP dulu (sudah dikosongkan)
+- Cukup upload tiap bulan, sistem otomatis simpan
+- Semua file aman di laptop, tidak dikirim kemana-mana
+- Hubungi admin jika butuh bantuan
+

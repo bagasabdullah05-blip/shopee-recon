@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dashboard Shopee - cbmajwastore 1-31 Aug 2026</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;font-family:Inter,system-ui,sans-serif}
+body{margin:0;background:#f8fafc;color:#0f172a}
+header{background:#ee4d2d;color:#fff;padding:18px 24px;display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+header h1{margin:0;font-size:18px}
+.container{max-width:1200px;margin:20px auto;padding:0 16px}
+.card{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:18px;margin-bottom:16px}
+.kpi{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media(max-width:700px){.kpi{grid-template-columns:repeat(2,1fr)}}
+.kpi div{background:#f8fafc;border-radius:10px;padding:14px;text-align:center;border:1px solid #e2e8f0}
+.kpi b{font-size:22px;display:block}
+.kpi span{font-size:12px;color:#64748b}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:900px){.grid2{grid-template-columns:1fr}}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:8px 10px;border-bottom:1px solid #e2e8f0;text-align:left}
+th{background:#f8fafc;position:sticky;top:0}
+.badge{padding:2px 8px;border-radius:999px;font-size:11px;font-weight:700;background:#f1f5f9}
+h3{margin:0 0 10px;font-size:15px}
+small{color:#64748b}
+canvas{max-height:320px}
+</style>
+</head>
+<body>
+<header>
+<div style="background:#fff;color:#ee4d2d;width:36px;height:36px;border-radius:8px;display:grid;place-items:center;font-weight:900">S</div>
+<div>
+<h1>Dashboard Shopee — cbmajwastore</h1>
+<div style="font-size:12px;opacity:.9">Periode 1–31 Agustus 2026 • 58 hari? 59 order • Total dilepas Rp 2.776.643 • Offline aman tanpa API</div>
+</div>
+<div style="margin-left:auto;display:flex;gap:8px;flex-wrap:wrap">
+<a href="../app.html" style="background:#0f172a;color:#fff;padding:8px 14px;border-radius:8px;text-decoration:none;font-weight:700;font-size:13px">↔ Sistem Multi-Bulan (Upload/Laba/Pelanggan)</a>
+<a href="Laporan_Shopee_BERSIH_20260801_20260831.xlsx" style="background:#fff;color:#ee4d2d;padding:8px 14px;border-radius:8px;text-decoration:none;font-weight:700;font-size:13px">Download Excel Bersih</a>
+</div>
+<div style="width:100%;margin-top:8px;display:flex;gap:8px;align-items:center">
+<label style="font-size:12px">Periode:</label>
+<select id="periodeSelect" style="padding:6px 10px;border-radius:8px;border:none;font-weight:700;color:#0f172a"><option value="all">Semua Bulan</option><option value="2026-08" selected>2026-08 (59 order)</option></select>
+<span id="periodeInfo" style="font-size:12px;opacity:.9"></span>
+</div>
+</header>
+
+<div class="container">
+<div class="card">
+<div class="kpi" id="kpi"></div>
+</div>
+
+<div class="grid2">
+<div class="card">
+<h3>Timeline Transaksi — Kapan Pesanan Dibuat</h3>
+<canvas id="chartTimeline"></canvas>
+<small>Waktu pesanan dibuat (Waktu Pesanan Dibuat) — lihat lonjakan tanggal</small>
+</div>
+<div class="card">
+<h3>Rekap Harian — Dana Dilepas</h3>
+<canvas id="chartHarian"></canvas>
+<small>Tanggal dana dilepas (pencairan) per hari</small>
+</div>
+</div>
+
+<div class="grid2">
+<div class="card">
+<h3>Produk Terlaris — Produk Apa Saja</h3>
+<canvas id="chartProduk"></canvas>
+</div>
+<div class="card">
+<h3>Jasa Kirim</h3>
+<canvas id="chartKurir"></canvas>
+</div>
+</div>
+
+<div class="card">
+<h3>Detail Produk (19 produk unik)</h3>
+<div style="max-height:360px;overflow:auto;border:1px solid #e2e8f0;border-radius:8px">
+<table id="tblProduk"><thead><tr><th>Produk</th><th>Trx</th><th>Total Dilepas</th><th>Rata²</th></tr></thead><tbody></tbody></table>
+</div>
+</div>
+
+<div class="card">
+<h3>Semua Transaksi (59 order — mudah dibaca)</h3>
+<div style="max-height:420px;overflow:auto;border:1px solid #e2e8f0;border-radius:8px">
+<table id="tblOrder"><thead><tr><th>No</th><th>No. Pesanan</th><th>Waktu Pesan</th><th>Tgl Cair</th><th>Produk</th><th>Pembeli</th><th>Kurir</th><th>Total</th></tr></thead><tbody></tbody></table>
+</div>
+</div>
+
+<div class="card" style="background:#0f172a;color:#e2e8f0">
+<b style="color:#fff">Keamanan:</b> Dashboard ini 100% offline, tidak pakai API Shopee, tidak akan kebanned. Data dari file Excel export manual Seller Center, diproses lokal. <br>
+<small style="color:#94a3b8">File sumber: Income.sudah dilepas.id.20260801_20260831.xlsx — 59 order, filter Order saja (Sku dibuang biar tidak dobel)</small>
+</div>
+</div>
+
+<script>
+const orders = [
+  {"id":"2608235DUJYERU","waktu":"2026-08-23","cair":"2026-08-31","produk":"Susu Kambing Etawa CBM 200gr - Baik UntukTulang dan Sendi","pembeli":"allnewrealme","kurir":"SPX Instant","total":117852},
+  {"id":"260827FDRXQNA9","waktu":"2026-08-27","cair":"2026-08-30","produk":"Susu Kambing Etawa CBM 200gr - Baik UntukTulang dan Sendi","pembeli":"sariisok","kurir":"SPX Instant Prioritas","total":35221},
+  {"id":"260827DCR48S6U","waktu":"2026-08-26","cair":"2026-08-30","produk":"Sari Kurma Ajwa Plus Angkak CBM 350gr - Menaikkan Trombosit","pembeli":"hk6euwqf7q","kurir":"SPX Hemat","total":42281},
+  {"id":"2608234F3QBEKR","waktu":"2026-08-23","cair":"2026-08-30","produk":"Citachanna Kapsul Ikan Gabus 50 Kapsul - Solusi Luka Cepat","pembeli":"vey.evandha","kurir":"SPX Instant Prioritas","total":78022},
+  {"id":"2608247DT1X063","waktu":"2026-08-24","cair":"2026-08-29","produk":"Kurma Khalas Saad Premium Original 500gr & 1kg","pembeli":"190yahyamakassar","kurir":"SPX Standard","total":53273},
+  {"id":"2608222GVGJ6G1","waktu":"2026-08-22","cair":"2026-08-29","produk":"Kurma Khalas Saad Premium Original 500gr & 1kg","pembeli":"190yahyamakassar","kurir":"SPX Standard","total":26011},
+  {"id":"2608247NDR4VSF","waktu":"2026-08-24","cair":"2026-08-28","produk":"Sari Kurma Ajwa Angkak CBM 350gr PROMO 1","pembeli":"dedipelonk","kurir":"SPX Standard","total":43127},
+  {"id":"260815CM56FXGY","waktu":"2026-08-15","cair":"2026-08-28","produk":"Sari Kurma Ajwa CBM ORIGINAL 350gr Plus Propolis","pembeli":"abdi_201924","kurir":"SPX Hemat","total":35150},
+  {"id":"260821VWS7RS71","waktu":"2026-08-21","cair":"2026-08-26","produk":"Kurma Khalas Saad Premium Original 500gr & 1kg","pembeli":"yongkysaputra009","kurir":"Anteraja Economy","total":26011},
+  {"id":"260819PY03S3JV","waktu":"2026-08-19","cair":"2026-08-26","produk":"Sari Kurma Ajwa CBM ORIGINAL 350gr Plus Propolis","pembeli":"adeiraone","kurir":"SPX Instant Prioritas","total":35150},
+  {"id":"2608210A485KNK","waktu":"2026-08-21","cair":"2026-08-25","produk":"CBM AJWA Keladicer Keladi Tikus 50 Kapsul","pembeli":"tnmngicvke","kurir":"SPX Standard","total":55373},
+  {"id":"260820TXYW5XC1","waktu":"2026-08-20","cair":"2026-08-24","produk":"Sari Kurma Ajwa CBM ORIGINAL 350gr Plus Propolis Isi 3","pembeli":"1234romi","kurir":"SPX Standard","total":88658},
+  {"id":"260815DM666P4X","waktu":"2026-08-15","cair":"2026-08-24","produk":"Sari Kurma Ajwa Ekstrak Angkak CBM 350gr","pembeli":"f7828vlv1u","kurir":"SPX Standard","total":38860},
+  {"id":"260821VM92N2W4","waktu":"2026-08-21","cair":"2026-08-23","produk":"Kapsul Angkak Pukang Isi 50 kapsul","pembeli":"1sa7nuf_gv","kurir":"JNE Reguler","total":120085},
+  {"id":"260819RBBM9PE5","waktu":"2026-08-19","cair":"2026-08-23","produk":"Sari Kurma Ajwa Angkak CBM 350gr PROMO 1","pembeli":"q71l_bjtb_","kurir":"SPX Standard","total":43127},
+  {"id":"2608138YT5KNVW","waktu":"2026-08-13","cair":"2026-08-23","produk":"Sari Kurma Ajwa CBM ORIGINAL 350gr Plus Propolis","pembeli":"rinsgood14","kurir":"SPX Hemat","total":33329},
+  {"id":"260815DQRBR4P9","waktu":"2026-08-15","cair":"2026-08-22","produk":"Sari Kurma Ajwa CBM ORIGINAL 350gr Plus Propolis","pembeli":"tsn9jonz92","kurir":"SPX Hemat","total":33329},
+  {"id":"2608139BYFGHGJ","waktu":"2026-08-13","cair":"2026-08-22","produk":"Sari Kurma Ajwa CBM ORIGINAL 100% 350gr Plus Propolis","pembeli":"winartisujadi","kurir":"SPX Hemat","total":33577},
+  {"id":"260815E0YWA8RM","waktu":"2026-08-15","cair":"2026-08-20","produk":"KURMA SUKARI Al Qosim Premium 500gr - 1kg","pembeli":"yatimonglay","kurir":"Anteraja Reguler","total":61062},
+  {"id":"260814BH3XCUR4","waktu":"2026-08-14","cair":"2026-08-20","produk":"Kurma Khalas Saad Premium Original 500gr & 1kg","pembeli":"190yahyamakassar","kurir":"SPX Standard","total":26011},
+  {"id":"26081266VC7U4P","waktu":"2026-08-12","cair":"2026-08-20","produk":"Sari Kurma Ajwa Angkak CBM 350gr PROMO 1","pembeli":"fitriyuni222","kurir":"SPX Standard","total":43127},
+  {"id":"260815DXHXEBW2","waktu":"2026-08-15","cair":"2026-08-19","produk":"Sari Kurma Ajwa CBM ORIGINAL 100% 350gr Plus Propolis","pembeli":"warjoko1","kurir":"SPX Hemat","total":33577},
+  {"id":"260815DVTCSPE4","waktu":"2026-08-15","cair":"2026-08-19","produk":"Sari Kurma Ajwa Ekstrak Angkak CBM 350gr","pembeli":"henyali72","kurir":"Anteraja Reguler","total":43147},
+  {"id":"26081398NYG37Q","waktu":"2026-08-13","cair":"2026-08-19","produk":"Sari Kurma Ajwa CBM ORIGINAL 350gr Plus Propolis","pembeli":"shidra","kurir":"Anteraja Reguler","total":31431},
+  {"id":"260816H1VQ97D6","waktu":"2026-08-16","cair":"2026-08-18","produk":"KURMA TUNIS 500gr dan 1 kg - FREE SUSU","pembeli":"mamichel","kurir":"JNE Reguler","total":61062},
+  {"id":"260814ANC4ETQY","waktu":"2026-08-14","cair":"2026-08-17","produk":"CBM AJWA Madu Murni Kemasan Pouch dan Jerigen","pembeli":"nurhajatialmaida","kurir":"SPX Standard","total":43729},
+  {"id":"26081274XT79WS","waktu":"2026-08-12","cair":"2026-08-16","produk":"KURMA TUNIS 500gr dan 1 kg - FREE SUSU","pembeli":"hanifah2719","kurir":"SPX Hemat","total":37695},
+  {"id":"260807QF723P49","waktu":"2026-08-07","cair":"2026-08-16","produk":"Susu Ettawa CBM Plus Gula Batu 200gr","pembeli":"allnewrealme","kurir":"SPX Standard","total":67447},
+  {"id":"26081391XKABN8","waktu":"2026-08-13","cair":"2026-08-15","produk":"Kurma Khalas Saad Premium Original 500gr & 1kg","pembeli":"oktafianrizky26","kurir":"SPX Standard","total":53273},
+  {"id":"2608114GSJP971","waktu":"2026-08-11","cair":"2026-08-15","produk":"Sari Kurma Ajwa CBM ORIGINAL 350gr Plus Propolis","pembeli":"kamalin08","kurir":"SPX Hemat","total":33329},
+  {"id":"2608114D02H92X","waktu":"2026-08-11","cair":"2026-08-15","produk":"Citachanna Kapsul Ikan Gabus 50 Kapsul","pembeli":"yudiariyanto516","kurir":"SPX Standard","total":64437},
+  {"id":"2608113NJAVVNS","waktu":"2026-08-11","cair":"2026-08-15","produk":"Madu Batuk ASYIFA Original 175 gram","pembeli":"rindarsih18","kurir":"Anteraja Reguler","total":27521},
+  {"id":"260806MBU71R1F","waktu":"2026-08-06","cair":"2026-08-15","produk":"CBM AJWA Keladicer Keladi Tikus 50 Kapsul","pembeli":"pakendrowahyu","kurir":"SPX Standard","total":49837},
+  {"id":"260803DPD2XDM0","waktu":"2026-08-03","cair":"2026-08-15","produk":"Sari Kurma Ajwa CBM ORIGINAL 350gr Plus Propolis","pembeli":"handayani.23.","kurir":"SPX Hemat","total":33329},
+  {"id":"260809V9RBYJMR","waktu":"2026-08-09","cair":"2026-08-13","produk":"Minyak Kelapa VCO Halmahera CBM 120ML","pembeli":"kkartikaa23","kurir":"SPX Standard","total":95018},
+  {"id":"260808SG05NV52","waktu":"2026-08-08","cair":"2026-08-13","produk":"Sari Kurma Ajwa Angkak CBM 350gr PROMO 1","pembeli":"z935025g53","kurir":"SPX Hemat","total":37684},
+  {"id":"260804EFX2217D","waktu":"2026-08-04","cair":"2026-08-13","produk":"Sari Kurma Ajwa CBM ORIGINAL 100% 350gr Plus Propolis","pembeli":"wahyu_martanti","kurir":"SPX Standard","total":32477},
+  {"id":"260808RXUP8DXV","waktu":"2026-08-08","cair":"2026-08-12","produk":"Sari Kurma Ajwa CBM ORIGINAL 100% 350gr Plus Propolis","pembeli":"45k08jq4q1","kurir":"SPX Hemat","total":58394},
+  {"id":"260805JK0RM6RA","waktu":"2026-08-05","cair":"2026-08-12","produk":"CBM Citagerd Madu Kunyit 175g Untuk Asam Lambung","pembeli":"keolahijab","kurir":"SPX Standard","total":55373},
+  {"id":"260803CVK11SG3","waktu":"2026-08-03","cair":"2026-08-12","produk":"Sari Kurma Ajwa Angkak CBM 350gr PROMO 1","pembeli":"faizalrahman1","kurir":"Anteraja Reguler","total":38791},
+  {"id":"260808SVJG7GY0","waktu":"2026-08-08","cair":"2026-08-11","produk":"Sari Kurma Ajwa Angkak CBM 350gr PROMO 1","pembeli":"wan_91olshop","kurir":"SPX Instant Prioritas","total":37684},
+  {"id":"260803BB46ECDY","waktu":"2026-08-03","cair":"2026-08-11","produk":"Sari Kurma Ajwa Angkak CBM 350gr PROMO 1","pembeli":"tataaaa911","kurir":"SPX Standard","total":38791},
+  {"id":"260808R7H7G6XA","waktu":"2026-08-08","cair":"2026-08-10","produk":"Sari Kurma Ajwa CBM ORIGINAL 100% 350gr Plus Propolis","pembeli":"luluk.maknunn","kurir":"SPX Standard","total":28571},
+  {"id":"260806MM34RD13","waktu":"2026-08-06","cair":"2026-08-10","produk":"KURMA SUKARI Al Qosim Premium 500gr - 1kg","pembeli":"ivuzudeyr5","kurir":"SPX Hemat","total":37695},
+  {"id":"260802AT6Q46KA","waktu":"2026-08-02","cair":"2026-08-10","produk":"Citachanna Kapsul Ikan Gabus 50 Kapsul","pembeli":"ichapanjaitan","kurir":"SPX Instant","total":56707},
+  {"id":"260806N2933KR4","waktu":"2026-08-06","cair":"2026-08-09","produk":"Sari Kurma Ajwa Angkak CBM 350gr PROMO 1","pembeli":"obas9q3opr","kurir":"SPX Standard","total":43127},
+  {"id":"260806ME3GJXR6","waktu":"2026-08-06","cair":"2026-08-09","produk":"Sari Kurma Ajwa Angkak CBM 350gr PROMO 1","pembeli":"endawati224","kurir":"SPX Standard","total":78829},
+  {"id":"260804G38JTPCX","waktu":"2026-08-04","cair":"2026-08-09","produk":"Sari Kurma Ajwa CBM ORIGINAL 100% 350gr Plus Propolis","pembeli":"agussabun","kurir":"SPX Hemat","total":32477},
+  {"id":"260807PNU56YED","waktu":"2026-08-07","cair":"2026-08-08","produk":"Sari Kurma Ajwa CBM ORIGINAL 100% 350gr Plus Propolis","pembeli":"adeiraone","kurir":"JNE Reguler","total":32477},
+  {"id":"260803D28C3Y5U","waktu":"2026-08-03","cair":"2026-08-07","produk":"Sari Kurma Ajwa Angkak CBM 350gr PROMO 1","pembeli":"indriasariin","kurir":"SPX Standard","total":36139},
+  {"id":"260727RHCFGUG1","waktu":"2026-07-27","cair":"2026-08-06","produk":"Sari Kurma Ajwa CBM ORIGINAL 100% 350gr Plus Propolis","pembeli":"q71l_bjtb_","kurir":"SPX Hemat","total":31744},
+  {"id":"260803DDAW2H5U","waktu":"2026-08-03","cair":"2026-08-05","produk":"Sari Kurma Ajwa Angkak CBM 350gr PROMO 1","pembeli":"mohamadfauzan23","kurir":"SPX Standard","total":38791},
+  {"id":"26080185MCXJ3B","waktu":"2026-08-01","cair":"2026-08-05","produk":"Sari Kurma Ajwa Angkak CBM 350gr PROMO 1","pembeli":"endawati224","kurir":"SPX Hemat","total":78829},
+  {"id":"26072912EGDH36","waktu":"2026-07-29","cair":"2026-08-05","produk":"Sari Kurma Ajwa CBM ORIGINAL 350gr Plus Propolis","pembeli":"esrinpuluhulawa110","kurir":"SPX Standard","total":67055},
+  {"id":"260728SW584CTE","waktu":"2026-07-28","cair":"2026-08-05","produk":"Sari Kurma Ajwa CBM ORIGINAL 100% 350gr Plus Propolis","pembeli":"nettyariningsih","kurir":"SPX Hemat","total":31851},
+  {"id":"260727RHN6X7TP","waktu":"2026-07-27","cair":"2026-08-05","produk":"Sari Kurma Ajwa Angkak CBM 350gr PROMO 1","pembeli":"q71l_bjtb_","kurir":"SPX Hemat","total":38791},
+  {"id":"260803DF8PXE3S","waktu":"2026-08-03","cair":"2026-08-04","produk":"Sari Kurma Ajwa CBM ORIGINAL 350gr Plus Propolis","pembeli":"adeiraone","kurir":"SPX Instant Prioritas","total":33329},
+  {"id":"2607290R5MPX3W","waktu":"2026-07-29","cair":"2026-08-03","produk":"Sari Kurma Ajwa Angkak CBM 350gr PROMO 1","pembeli":"sukatmimul","kurir":"SPX Standard","total":38791},
+  {"id":"260728U995BGK3","waktu":"2026-07-28","cair":"2026-08-03","produk":"Sari Kurma Ajwa CBM ORIGINAL 100% 350gr Plus Propolis","pembeli":"adeiraone","kurir":"SPX Standard","total":28778}
+];
+
+let currentOrders = orders;
+function getFilteredOrders(){
+  const sel=document.getElementById('periodeSelect')?.value || 'all';
+  if(sel==='all') return orders;
+  // filter by cair month or waktu month
+  return orders.filter(o=> (o.cair||'').startsWith(sel) || (o.waktu||'').startsWith(sel));
+}
+function isMultiBulan(){ try{ const m=JSON.parse(localStorage.getItem('months')||'[]'); return m.length>1; }catch{ return false; } }
+const total = orders.reduce((a,b)=>a+b.total,0);
+function renderKpi(list){
+  const t=list.reduce((a,b)=>a+b.total,0);
+  document.getElementById('kpi').innerHTML = `
+<div><span>Total Order</span><b>${list.length}</b></div>
+<div><span>Total Dilepas</span><b>Rp ${t.toLocaleString('id-ID')}</b></div>
+<div><span>Produk Unik</span><b>${new Set(list.map(o=>o.produk)).size}</b></div>
+<div><span>Rata² / Order</span><b>Rp ${list.length?Math.round(t/list.length).toLocaleString('id-ID'):'0'}</b></div>
+`;
+  const info=document.getElementById('periodeInfo');
+  if(info) info.textContent = list.length!==orders.length ? `Menampilkan ${list.length} dari ${orders.length} order` : `Terhubung ke Sistem Multi-Bulan: ${JSON.parse(localStorage.getItem('months')||'[]').length} bulan tersimpan`;
+}
+renderKpi(currentOrders);
+
+// produk
+const perProduk = {};
+orders.forEach(o=>{ if(!perProduk[o.produk]) perProduk[o.produk]={c:0,t:0}; perProduk[o.produk].c++; perProduk[o.produk].t+=o.total; });
+const sortedProduk = Object.entries(perProduk).sort((a,b)=>b[1].c-a[1].c).slice(0,8);
+document.querySelector('#tblProduk tbody').innerHTML = Object.entries(perProduk).sort((a,b)=>b[1].c-a[1].c).map(([p,v])=>`<tr><td>${p}</td><td>${v.c}</td><td>Rp ${v.t.toLocaleString('id-ID')}</td><td>Rp ${Math.round(v.t/v.c).toLocaleString('id-ID')}</td></tr>`).join('');
+new Chart(document.getElementById('chartProduk'),{type:'bar',data:{labels:sortedProduk.map(x=>x[0].slice(0,22)+'...'),datasets:[{label:'Jumlah Transaksi',data:sortedProduk.map(x=>x[1].c),backgroundColor:'#ee4d2d'}]},options:{indexAxis:'y',plugins:{legend:{display:false}}}});
+
+// timeline pesanan dibuat
+const perWaktu={}; orders.forEach(o=>{ if(!perWaktu[o.waktu]) perWaktu[o.waktu]={c:0,t:0}; perWaktu[o.waktu].c++; perWaktu[o.waktu].t+=o.total; });
+const labelsWaktu=Object.keys(perWaktu).sort();
+new Chart(document.getElementById('chartTimeline'),{type:'bar',data:{labels:labelsWaktu,datasets:[{label:'Order dibuat',data:labelsWaktu.map(k=>perWaktu[k].c),backgroundColor:'#0ea5e9'}]},options:{plugins:{legend:{display:false}}}});
+
+// harian cair
+const perCair={}; orders.forEach(o=>{ if(!perCair[o.cair]) perCair[o.cair]={c:0,t:0}; perCair[o.cair].c++; perCair[o.cair].t+=o.total; });
+const labelsCair=Object.keys(perCair).sort();
+new Chart(document.getElementById('chartHarian'),{type:'line',data:{labels:labelsCair,datasets:[{label:'Dana cair (Rp)',data:labelsCair.map(k=>perCair[k].t),borderColor:'#16a34a',backgroundColor:'rgba(22,163,74,.15)',fill:true,tension:.3},{label:'Jumlah order cair',data:labelsCair.map(k=>perCair[k].c),borderColor:'#f59e0b',yAxisID:'y1'}]},options:{scales:{y1:{position:'right',grid:{display:false}}}}});
+
+// kurir
+const perKurir={}; orders.forEach(o=>{ if(!perKurir[o.kurir]) perKurir[o.kurir]={c:0,t:0}; perKurir[o.kurir].c++; perKurir[o.kurir].t+=o.total; });
+new Chart(document.getElementById('chartKurir'),{type:'doughnut',data:{labels:Object.keys(perKurir),datasets:[{data:Object.values(perKurir).map(v=>v.c),backgroundColor:['#ee4d2d','#0ea5e9','#16a34a','#f59e0b','#8b5cf6','#ec4899']}]}});
+
+// tabel order
+document.querySelector('#tblOrder tbody').innerHTML = currentOrders.map((o,i)=>`<tr><td>${i+1}</td><td>${o.id}</td><td>${o.waktu}</td><td>${o.cair}</td><td style="max-width:260px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${o.produk}">${o.produk}</td><td>${o.pembeli}</td><td>${o.kurir}</td><td>Rp ${o.total.toLocaleString('id-ID')}</td></tr>`).join('');
+// periode filter listener
+document.getElementById('periodeSelect')?.addEventListener('change',()=>{
+  currentOrders=getFilteredOrders();
+  renderKpi(currentOrders);
+  // re-render tabel & charts
+  document.querySelector('#tblOrder tbody').innerHTML = currentOrders.map((o,i)=>`<tr><td>${i+1}</td><td>${o.id}</td><td>${o.waktu}</td><td>${o.cair}</td><td style="max-width:260px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${o.produk}">${o.produk}</td><td>${o.pembeli}</td><td>${o.kurir}</td><td>Rp ${o.total.toLocaleString('id-ID')}</td></tr>`).join('');
+  location.reload();
+});
+</script>
+</body>
+</html>
