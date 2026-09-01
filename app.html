@@ -138,6 +138,10 @@ input,select{padding:8px 10px;border:1px solid #cbd5e1;border-radius:8px;width:1
 </div>
 <div class="card">
 <h3>Rincian Laba per Produk</h3>
+<div style="display:flex;gap:8px;margin-bottom:8px">
+<button class="btn" id="btnExtractProduk" style="background:#0ea5e9">⬇ Extract Penjualan per Produk (.xlsx)</button>
+<span class="small" style="align-self:center">Extract penjualan per produk sesuai toko & periode yang dipilih di atas</span>
+</div>
 <div style="max-height:380px;overflow:auto;border:1px solid #e2e8f0;border-radius:8px">
 <table id="tblLabaProduk"><thead><tr><th>Produk</th><th>Trx</th><th>Penghasilan</th><th>HPP</th><th>Laba</th><th>Margin</th></tr></thead><tbody></tbody></table>
 </div>
@@ -803,6 +807,64 @@ document.getElementById('btnExportPelanggan').addEventListener('click',()=>{
   ws['!autofilter']={ref:'A1:H1'}; ws['!freeze']={xSplit:0,ySplit:1};
   const wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,'Pelanggan');
   XLSX.writeFile(wb,`Pelanggan_${getAkunAktif()}_${view==='all'?'SemuaBulan':view}.xlsx`);
+});
+document.getElementById('btnExtractProduk')?.addEventListener('click',()=>{
+  if(ordersCache.length===0){ alert('Belum ada data — upload dulu atau pilih periode'); return; }
+  const view=document.getElementById('viewPeriode')?.value||'all';
+  const akun=getAkunAktif();
+  const r=hitungLaba(ordersCache, getManualTotalForView(view));
+  // hitung penjualan per produk + per periode breakdown
+  const perProdukPeriode=new Map();
+  ordersCache.forEach(o=>{
+    const key=o.namaProduk;
+    if(!perProdukPeriode.has(key)) perProdukPeriode.set(key, {nama:key, id:o.idProduk?.split(',')[0]||'', trx:0, subtotal:0, penghasilan:0, hpp:0, laba:0, periode:{}});
+    const v=perProdukPeriode.get(key);
+    const hppVal=hppMap.get(o.idProduk?.split(',')[0]) ?? hppMap.get(o.namaProduk) ?? 0;
+    v.trx++; v.subtotal+=o.hargaProduk; v.penghasilan+=o.totalPenghasilan; v.hpp+=hppVal; v.laba+=o.totalPenghasilan - hppVal;
+    const per=o.waktuPesanan?.slice(0,7) || view;
+    if(!v.periode[per]) v.periode[per]={trx:0, penghasilan:0};
+    v.periode[per].trx++; v.periode[per].penghasilan+=o.totalPenghasilan;
+  });
+  const wb=XLSX.utils.book_new();
+  // Sheet 1: Ringkasan extract
+  const ringkas=[
+    ['EXTRACT PENJUALAN PER PRODUK — Akun '+akun],
+    ['Periode View', view==='all'?'Semua Bulan ('+monthsCache.length+' bulan)':view],
+    ['Akun', akun],
+    ['Tanggal Extract', new Date().toLocaleDateString('id-ID')],
+    ['Total Produk Unik', perProdukPeriode.size],
+    ['Total Order', ordersCache.length],
+    ['Total Subtotal', r.ringkasan.totalSubtotal],
+    ['Total Penghasilan', r.ringkasan.totalPenghasilan],
+  ];
+  const ws0=XLSX.utils.aoa_to_sheet(ringkas); ws0['!cols']=[{wch:22},{wch:28}];
+  XLSX.utils.book_append_sheet(wb, ws0, 'Ringkasan');
+  // Sheet 2: Penjualan per Produk - utama
+  const header2=['No','ID Produk','Nama Produk','Jml Terjual (Trx)','Subtotal (Rp)','Penghasilan (Rp)','HPP Total (Rp)','Laba (Rp)','Margin','Rata Penghasilan'];
+  const rows2=[header2, ...[...perProdukPeriode.values()].sort((a,b)=>b.trx-a.trx).map((v,i)=>[i+1, v.id, v.nama, v.trx, v.subtotal, v.penghasilan, v.hpp, v.laba, (v.laba/v.subtotal*100).toFixed(1)+'%', Math.round(v.penghasilan/v.trx)])];
+  const ws1=XLSX.utils.aoa_to_sheet(rows2); ws1['!cols']=[{wch:4},{wch:16},{wch:50},{wch:10},{wch:14},{wch:14},{wch:14},{wch:14},{wch:8},{wch:14}]; ws1['!autofilter']={ref:'A1:J1'}; ws1['!freeze']={xSplit:0,ySplit:1};
+  XLSX.utils.book_append_sheet(wb, ws1, 'Per Produk');
+  // Sheet 3: Breakdown per produk per periode (jika view all)
+  if(view==='all' && monthsCache.length>1){
+    const periodeList=[...new Set(ordersCache.map(o=>o.waktuPesanan?.slice(0,7)).filter(Boolean))].sort();
+    const header3=['No','Nama Produk', ...periodeList.map(p=>p+' Trx'), ...periodeList.map(p=>p+' Rp')];
+    const rows3=[header3];
+    let idx=1;
+    for(const v of [...perProdukPeriode.values()].sort((a,b)=>b.trx-a.trx)){
+      const row=[idx++, v.nama];
+      periodeList.forEach(p=> row.push(v.periode[p]?.trx||0));
+      periodeList.forEach(p=> row.push(v.periode[p]?.penghasilan||0));
+      rows3.push(row);
+    }
+    const ws2=XLSX.utils.aoa_to_sheet(rows3); ws2['!cols']=[{wch:4},{wch:40}, ...periodeList.map(()=>({wch:9})), ...periodeList.map(()=>({wch:12}))]; ws2['!autofilter']={ref:'A1:'+XLSX.utils.encode_col(header3.length-1)+'1'}; ws2['!freeze']={xSplit:2,ySplit:1};
+    XLSX.utils.book_append_sheet(wb, ws2, 'Per Produk per Bulan');
+  }
+  // Sheet 4: Detail per order (penting saja)
+  const header4=['No','No. Pesanan','Waktu Pesan','Tgl Cair','Nama Produk','ID Produk','Pembeli','Jasa Kirim','Subtotal','Penghasilan','HPP','Laba'];
+  const rows4=[header4, ...ordersCache.map((o,i)=>[i+1,o.noPesanan,o.waktuPesanan,o.tanggalDilepas,o.namaProduk,o.idProduk,o.usernamePembeli,o.jasaKirim,o.hargaProduk,o.totalPenghasilan, hppMap.get(o.idProduk?.split(',')[0])??hppMap.get(o.namaProduk)??0, o.totalPenghasilan - (hppMap.get(o.idProduk?.split(',')[0])??hppMap.get(o.namaProduk)??0)])];
+  const ws3=XLSX.utils.aoa_to_sheet(rows4); ws3['!cols']=[{wch:4},{wch:16},{wch:12},{wch:12},{wch:40},{wch:16},{wch:16},{wch:12},{wch:12},{wch:12},{wch:10},{wch:12}]; ws3['!autofilter']={ref:'A1:L1'}; ws3['!freeze']={xSplit:0,ySplit:1};
+  XLSX.utils.book_append_sheet(wb, ws3, 'Detail Order');
+  XLSX.writeFile(wb, `Extract_Penjualan_PerProduk_${akun}_${view==='all'?'SemuaBulan':view}.xlsx`);
 });
 document.getElementById('btnBackup')?.addEventListener('click',()=>{
   const akun=getAkunAktif();
