@@ -1,1 +1,919 @@
-[]
+[
+  {
+    "username": "allnewrealme",
+    "totalOrder": 10,
+    "totalBelanja": 1248760,
+    "totalDilepas": 926495,
+    "jasaKirim": {
+      "SPX Instant": 5,
+      "SPX Standard": 5
+    },
+    "produk": {
+      "Susu Kambing Etawa CBM 200gr - Baik UntukTulang dan Sendi": 5,
+      "Susu Ettawa CBM Plus Gula Batu 200gr": 5
+    },
+    "pertama": "2026-08-07",
+    "terakhir": "2026-08-23",
+    "daftarPesanan": [
+      "2608235DUJYERU",
+      "260807QF723P49"
+    ],
+    "no": 1
+  },
+  {
+    "username": "endawati224",
+    "totalOrder": 10,
+    "totalBelanja": 989980,
+    "totalDilepas": 788290,
+    "jasaKirim": {
+      "SPX Standard": 5,
+      "SPX Hemat": 5
+    },
+    "produk": {
+      "Sari Kurma Ajwa Angkak CBM 350gr PROMO 1": 10
+    },
+    "pertama": "2026-08-01",
+    "terakhir": "2026-08-06",
+    "daftarPesanan": [
+      "260806ME3GJXR6",
+      "26080185MCXJ3B"
+    ],
+    "no": 2
+  },
+  {
+    "username": "adeiraone",
+    "totalOrder": 20,
+    "totalBelanja": 851160,
+    "totalDilepas": 648670,
+    "jasaKirim": {
+      "SPX Instant Prioritas": 10,
+      "JNE Reguler": 5,
+      "SPX Standard": 5
+    },
+    "produk": {
+      "Sari Kurma Ajwa CBM ORIGINAL 350gr Plus Propolis": 10,
+      "Sari Kurma Ajwa CBM ORIGINAL 100% 350gr Plus Propolis": 10
+    },
+    "pertama": "2026-07-28",
+    "terakhir": "2026-08-19",
+    "daftarPesanan": [
+      "260819PY03S3JV",
+      "260807PNU56YED",
+      "260803DF8PXE3S",
+      "260728U995BGK3"
+    ],
+    "no": 3
+  },
+  {
+    "username": "1sa7nuf_gv",
+    "totalOrder": 5,
+    "totalBelanja": 750000,
+    "totalDilepas": 600425,
+    "jasaKirim": {
+      "JNE Reguler": 5
+    },
+    "produk": {
+      "Kapsul Angkak Pukang Isi 50 kapsul": 5
+    },
+    "pertama": "2026-08-21",
+    "terakhir": "2026-08-21",
+    "daftarPesanan": [
+      "260821VM92N2W4"
+    ],
+    "no": 4
+  },
+  {
+    "username": "q71l_bjtb_",
+    "totalOrder": 15,
+    "totalBelanja": 725745,
+    "totalDilepas": 568310,
+    "jasaKirim": {
+      "SPX Standard": 5,
+      "SPX Hemat": 10
+    },
+    "produk": {
+      "Sari Kurma Ajwa Angkak CBM 350gr PROMO 1": 10,
+      "Sari Kurma Ajwa CBM ORIGINAL 100% 350gr Plus Propolis": 5
+    },
+    "pertama": "2026-07-27",
+    "terakhir": "2026-08-19",
+    "daftarPesanan": [
+      "260819RBBM9PE5",
+      "260727RHCFGUG1",
+      "260727RHN6X7TP"
+    ],
+    "no": 5
+  },
+  {
+    "username": "190yahyamakassar",
+    "totalOrder": 15,
+    "totalBelanja": 700000,
+    "totalDilepas": 526475,
+    "jasaKirim": {
+      "SPX Standard": 15
+    },
+    "produk": {
+      "Kurma Khalas Saad Premium Original 500gr & 1kg": 15
+    },
+    "pertama": "2026-08-14",
+    "terakhir": "2026-08-24",
+    "daftarPesanan": [
+      "2608247DT1X063",
+      "2608222GVGJ6G1",
+      "260814BH3XCUR4"
+    ],
+    "no": 6
+  },
+  {
+    "username": "kkartikaa23",
+    "totalOrder": 5,
+    "totalBelanja": 595050,
+    "totalDilepas": 475090,
+    "jasaKirim": {
+      "SPX Standard": 5
+    },
+    "produk": {
+      "Minyak Kelapa VCO Halmahera CBM 120ML": 5
+    },
+    "pertama": "2026-08-09",
+    "terakhir": "2026-08-09",
+    "daftarPesanan": [
+      "260809V9RBYJMR"
+    ],
+    "no": 7
+  },
+  {
+    "username": "1234romi",
+    "totalOrder": 5,
+    "totalBelanja": 555750,
+    "totalDilepas": 443290,
+    "jasaKirim": {
+      "SPX Standard": 5
+    },
+    "produk": {
+      "Sari Kurma Ajwa CBM ORIGINAL 350gr Plus Propolis Isi 3": 5
+    },
+    "pertama": "2026-08-20",
+    "terakhir": "2026-08-20",
+    "daftarPesanan": [
+      "260820TXYW5XC1"
+    ],
+    "no": 8
+  },
+  {
+    "username": "vey.evandha",
+    "totalOrder": 5,
+    "totalBelanja": 490000,
+    "totalDilepas": 390110,
+    "jasaKirim": {
+      "SPX Instant Prioritas": 5
+    },
+    "produk": {
+      "Citachanna Kapsul Ikan Gabus 50 Kapsul - Solusi Luka Cepat": 5
+    },
+    "pertama": "2026-08-23",
+    "terakhir": "2026-08-23",
+    "daftarPesanan": [
+      "2608234F3QBEKR"
+    ],
+    "no": 9
+  },
+  {
+    "username": "esrinpuluhulawa110",
+    "totalOrder": 5,
+    "totalBelanja": 450000,
+    "totalDilepas": 335275,
+    "jasaKirim": {
+      "SPX Standard": 5
+    },
+    "produk": {
+      "Sari Kurma Ajwa CBM ORIGINAL 350gr Plus Propolis": 5
+    },
+    "pertama": "2026-07-29",
+    "terakhir": "2026-07-29",
+    "daftarPesanan": [
+      "26072912EGDH36"
+    ],
+    "no": 10
+  },
+  {
+    "username": "yudiariyanto516",
+    "totalOrder": 5,
+    "totalBelanja": 441000,
+    "totalDilepas": 322185,
+    "jasaKirim": {
+      "SPX Standard": 5
+    },
+    "produk": {
+      "Citachanna Kapsul Ikan Gabus 50 Kapsul": 5
+    },
+    "pertama": "2026-08-11",
+    "terakhir": "2026-08-11",
+    "daftarPesanan": [
+      "2608114D02H92X"
+    ],
+    "no": 11
+  },
+  {
+    "username": "yatimonglay",
+    "totalOrder": 5,
+    "totalBelanja": 400000,
+    "totalDilepas": 305310,
+    "jasaKirim": {
+      "Anteraja Reguler": 5
+    },
+    "produk": {
+      "KURMA SUKARI Al Qosim Premium 500gr - 1kg": 5
+    },
+    "pertama": "2026-08-15",
+    "terakhir": "2026-08-15",
+    "daftarPesanan": [
+      "260815E0YWA8RM"
+    ],
+    "no": 12
+  },
+  {
+    "username": "mamichel",
+    "totalOrder": 5,
+    "totalBelanja": 400000,
+    "totalDilepas": 305310,
+    "jasaKirim": {
+      "JNE Reguler": 5
+    },
+    "produk": {
+      "KURMA TUNIS 500gr dan 1 kg - FREE SUSU": 5
+    },
+    "pertama": "2026-08-16",
+    "terakhir": "2026-08-16",
+    "daftarPesanan": [
+      "260816H1VQ97D6"
+    ],
+    "no": 13
+  },
+  {
+    "username": "45k08jq4q1",
+    "totalOrder": 5,
+    "totalBelanja": 368670,
+    "totalDilepas": 291970,
+    "jasaKirim": {
+      "SPX Hemat": 5
+    },
+    "produk": {
+      "Sari Kurma Ajwa CBM ORIGINAL 100% 350gr Plus Propolis": 5
+    },
+    "pertama": "2026-08-08",
+    "terakhir": "2026-08-08",
+    "daftarPesanan": [
+      "260808RXUP8DXV"
+    ],
+    "no": 14
+  },
+  {
+    "username": "ichapanjaitan",
+    "totalOrder": 5,
+    "totalBelanja": 392000,
+    "totalDilepas": 283535,
+    "jasaKirim": {
+      "SPX Instant": 5
+    },
+    "produk": {
+      "Citachanna Kapsul Ikan Gabus 50 Kapsul": 5
+    },
+    "pertama": "2026-08-02",
+    "terakhir": "2026-08-02",
+    "daftarPesanan": [
+      "260802AT6Q46KA"
+    ],
+    "no": 15
+  },
+  {
+    "username": "tnmngicvke",
+    "totalOrder": 5,
+    "totalBelanja": 350000,
+    "totalDilepas": 276865,
+    "jasaKirim": {
+      "SPX Standard": 5
+    },
+    "produk": {
+      "CBM AJWA Keladicer Keladi Tikus 50 Kapsul": 5
+    },
+    "pertama": "2026-08-21",
+    "terakhir": "2026-08-21",
+    "daftarPesanan": [
+      "2608210A485KNK"
+    ],
+    "no": 16
+  },
+  {
+    "username": "keolahijab",
+    "totalOrder": 5,
+    "totalBelanja": 350000,
+    "totalDilepas": 276865,
+    "jasaKirim": {
+      "SPX Standard": 5
+    },
+    "produk": {
+      "CBM Citagerd Madu Kunyit 175g Untuk Asam Lambung": 5
+    },
+    "pertama": "2026-08-05",
+    "terakhir": "2026-08-05",
+    "daftarPesanan": [
+      "260805JK0RM6RA"
+    ],
+    "no": 17
+  },
+  {
+    "username": "oktafianrizky26",
+    "totalOrder": 5,
+    "totalBelanja": 350000,
+    "totalDilepas": 266365,
+    "jasaKirim": {
+      "SPX Standard": 5
+    },
+    "produk": {
+      "Kurma Khalas Saad Premium Original 500gr & 1kg": 5
+    },
+    "pertama": "2026-08-13",
+    "terakhir": "2026-08-13",
+    "daftarPesanan": [
+      "26081391XKABN8"
+    ],
+    "no": 18
+  },
+  {
+    "username": "pakendrowahyu",
+    "totalOrder": 5,
+    "totalBelanja": 350000,
+    "totalDilepas": 249185,
+    "jasaKirim": {
+      "SPX Standard": 5
+    },
+    "produk": {
+      "CBM AJWA Keladicer Keladi Tikus 50 Kapsul": 5
+    },
+    "pertama": "2026-08-06",
+    "terakhir": "2026-08-06",
+    "daftarPesanan": [
+      "260806MBU71R1F"
+    ],
+    "no": 19
+  },
+  {
+    "username": "nurhajatialmaida",
+    "totalOrder": 5,
+    "totalBelanja": 288750,
+    "totalDilepas": 218645,
+    "jasaKirim": {
+      "SPX Standard": 5
+    },
+    "produk": {
+      "CBM AJWA Madu Murni Kemasan Pouch dan Jerigen": 5
+    },
+    "pertama": "2026-08-14",
+    "terakhir": "2026-08-14",
+    "daftarPesanan": [
+      "260814ANC4ETQY"
+    ],
+    "no": 20
+  },
+  {
+    "username": "henyali72",
+    "totalOrder": 5,
+    "totalBelanja": 285000,
+    "totalDilepas": 215735,
+    "jasaKirim": {
+      "Anteraja Reguler": 5
+    },
+    "produk": {
+      "Sari Kurma Ajwa Ekstrak Angkak CBM 350gr": 5
+    },
+    "pertama": "2026-08-15",
+    "terakhir": "2026-08-15",
+    "daftarPesanan": [
+      "260815DVTCSPE4"
+    ],
+    "no": 21
+  },
+  {
+    "username": "dedipelonk",
+    "totalOrder": 5,
+    "totalBelanja": 274310,
+    "totalDilepas": 215635,
+    "jasaKirim": {
+      "SPX Standard": 5
+    },
+    "produk": {
+      "Sari Kurma Ajwa Angkak CBM 350gr PROMO 1": 5
+    },
+    "pertama": "2026-08-24",
+    "terakhir": "2026-08-24",
+    "daftarPesanan": [
+      "2608247NDR4VSF"
+    ],
+    "no": 22
+  },
+  {
+    "username": "fitriyuni222",
+    "totalOrder": 5,
+    "totalBelanja": 274310,
+    "totalDilepas": 215635,
+    "jasaKirim": {
+      "SPX Standard": 5
+    },
+    "produk": {
+      "Sari Kurma Ajwa Angkak CBM 350gr PROMO 1": 5
+    },
+    "pertama": "2026-08-12",
+    "terakhir": "2026-08-12",
+    "daftarPesanan": [
+      "26081266VC7U4P"
+    ],
+    "no": 23
+  },
+  {
+    "username": "obas9q3opr",
+    "totalOrder": 5,
+    "totalBelanja": 274310,
+    "totalDilepas": 215635,
+    "jasaKirim": {
+      "SPX Standard": 5
+    },
+    "produk": {
+      "Sari Kurma Ajwa Angkak CBM 350gr PROMO 1": 5
+    },
+    "pertama": "2026-08-06",
+    "terakhir": "2026-08-06",
+    "daftarPesanan": [
+      "260806N2933KR4"
+    ],
+    "no": 24
+  },
+  {
+    "username": "hk6euwqf7q",
+    "totalOrder": 5,
+    "totalBelanja": 269080,
+    "totalDilepas": 211405,
+    "jasaKirim": {
+      "SPX Hemat": 5
+    },
+    "produk": {
+      "Sari Kurma Ajwa Plus Angkak CBM 350gr - Menaikkan Trombosit": 5
+    },
+    "pertama": "2026-08-26",
+    "terakhir": "2026-08-26",
+    "daftarPesanan": [
+      "260827DCR48S6U"
+    ],
+    "no": 25
+  },
+  {
+    "username": "f7828vlv1u",
+    "totalOrder": 5,
+    "totalBelanja": 285000,
+    "totalDilepas": 194300,
+    "jasaKirim": {
+      "SPX Standard": 5
+    },
+    "produk": {
+      "Sari Kurma Ajwa Ekstrak Angkak CBM 350gr": 5
+    },
+    "pertama": "2026-08-15",
+    "terakhir": "2026-08-15",
+    "daftarPesanan": [
+      "260815DM666P4X"
+    ],
+    "no": 26
+  },
+  {
+    "username": "faizalrahman1",
+    "totalOrder": 5,
+    "totalBelanja": 247495,
+    "totalDilepas": 193955,
+    "jasaKirim": {
+      "Anteraja Reguler": 5
+    },
+    "produk": {
+      "Sari Kurma Ajwa Angkak CBM 350gr PROMO 1": 5
+    },
+    "pertama": "2026-08-03",
+    "terakhir": "2026-08-03",
+    "daftarPesanan": [
+      "260803CVK11SG3"
+    ],
+    "no": 27
+  },
+  {
+    "username": "tataaaa911",
+    "totalOrder": 5,
+    "totalBelanja": 247495,
+    "totalDilepas": 193955,
+    "jasaKirim": {
+      "SPX Standard": 5
+    },
+    "produk": {
+      "Sari Kurma Ajwa Angkak CBM 350gr PROMO 1": 5
+    },
+    "pertama": "2026-08-03",
+    "terakhir": "2026-08-03",
+    "daftarPesanan": [
+      "260803BB46ECDY"
+    ],
+    "no": 28
+  },
+  {
+    "username": "mohamadfauzan23",
+    "totalOrder": 5,
+    "totalBelanja": 247495,
+    "totalDilepas": 193955,
+    "jasaKirim": {
+      "SPX Standard": 5
+    },
+    "produk": {
+      "Sari Kurma Ajwa Angkak CBM 350gr PROMO 1": 5
+    },
+    "pertama": "2026-08-03",
+    "terakhir": "2026-08-03",
+    "daftarPesanan": [
+      "260803DDAW2H5U"
+    ],
+    "no": 29
+  },
+  {
+    "username": "sukatmimul",
+    "totalOrder": 5,
+    "totalBelanja": 247495,
+    "totalDilepas": 193955,
+    "jasaKirim": {
+      "SPX Standard": 5
+    },
+    "produk": {
+      "Sari Kurma Ajwa Angkak CBM 350gr PROMO 1": 5
+    },
+    "pertama": "2026-07-29",
+    "terakhir": "2026-07-29",
+    "daftarPesanan": [
+      "2607290R5MPX3W"
+    ],
+    "no": 30
+  },
+  {
+    "username": "hanifah2719",
+    "totalOrder": 5,
+    "totalBelanja": 250000,
+    "totalDilepas": 188475,
+    "jasaKirim": {
+      "SPX Hemat": 5
+    },
+    "produk": {
+      "KURMA TUNIS 500gr dan 1 kg - FREE SUSU": 5
+    },
+    "pertama": "2026-08-12",
+    "terakhir": "2026-08-12",
+    "daftarPesanan": [
+      "26081274XT79WS"
+    ],
+    "no": 31
+  },
+  {
+    "username": "ivuzudeyr5",
+    "totalOrder": 5,
+    "totalBelanja": 250000,
+    "totalDilepas": 188475,
+    "jasaKirim": {
+      "SPX Hemat": 5
+    },
+    "produk": {
+      "KURMA SUKARI Al Qosim Premium 500gr - 1kg": 5
+    },
+    "pertama": "2026-08-06",
+    "terakhir": "2026-08-06",
+    "daftarPesanan": [
+      "260806MM34RD13"
+    ],
+    "no": 32
+  },
+  {
+    "username": "z935025g53",
+    "totalOrder": 5,
+    "totalBelanja": 240660,
+    "totalDilepas": 188420,
+    "jasaKirim": {
+      "SPX Hemat": 5
+    },
+    "produk": {
+      "Sari Kurma Ajwa Angkak CBM 350gr PROMO 1": 5
+    },
+    "pertama": "2026-08-08",
+    "terakhir": "2026-08-08",
+    "daftarPesanan": [
+      "260808SG05NV52"
+    ],
+    "no": 33
+  },
+  {
+    "username": "wan_91olshop",
+    "totalOrder": 5,
+    "totalBelanja": 240660,
+    "totalDilepas": 188420,
+    "jasaKirim": {
+      "SPX Instant Prioritas": 5
+    },
+    "produk": {
+      "Sari Kurma Ajwa Angkak CBM 350gr PROMO 1": 5
+    },
+    "pertama": "2026-08-08",
+    "terakhir": "2026-08-08",
+    "daftarPesanan": [
+      "260808SVJG7GY0"
+    ],
+    "no": 34
+  },
+  {
+    "username": "indriasariin",
+    "totalOrder": 5,
+    "totalBelanja": 247495,
+    "totalDilepas": 180695,
+    "jasaKirim": {
+      "SPX Standard": 5
+    },
+    "produk": {
+      "Sari Kurma Ajwa Angkak CBM 350gr PROMO 1": 5
+    },
+    "pertama": "2026-08-03",
+    "terakhir": "2026-08-03",
+    "daftarPesanan": [
+      "260803D28C3Y5U"
+    ],
+    "no": 35
+  },
+  {
+    "username": "sariisok",
+    "totalOrder": 5,
+    "totalBelanja": 254850,
+    "totalDilepas": 176105,
+    "jasaKirim": {
+      "SPX Instant Prioritas": 5
+    },
+    "produk": {
+      "Susu Kambing Etawa CBM 200gr - Baik UntukTulang dan Sendi": 5
+    },
+    "pertama": "2026-08-27",
+    "terakhir": "2026-08-27",
+    "daftarPesanan": [
+      "260827FDRXQNA9"
+    ],
+    "no": 36
+  },
+  {
+    "username": "abdi_201924",
+    "totalOrder": 5,
+    "totalBelanja": 225000,
+    "totalDilepas": 175750,
+    "jasaKirim": {
+      "SPX Hemat": 5
+    },
+    "produk": {
+      "Sari Kurma Ajwa CBM ORIGINAL 350gr Plus Propolis": 5
+    },
+    "pertama": "2026-08-15",
+    "terakhir": "2026-08-15",
+    "daftarPesanan": [
+      "260815CM56FXGY"
+    ],
+    "no": 37
+  },
+  {
+    "username": "winartisujadi",
+    "totalOrder": 5,
+    "totalBelanja": 215270,
+    "totalDilepas": 167885,
+    "jasaKirim": {
+      "SPX Hemat": 5
+    },
+    "produk": {
+      "Sari Kurma Ajwa CBM ORIGINAL 100% 350gr Plus Propolis": 5
+    },
+    "pertama": "2026-08-13",
+    "terakhir": "2026-08-13",
+    "daftarPesanan": [
+      "2608139BYFGHGJ"
+    ],
+    "no": 38
+  },
+  {
+    "username": "warjoko1",
+    "totalOrder": 5,
+    "totalBelanja": 215270,
+    "totalDilepas": 167885,
+    "jasaKirim": {
+      "SPX Hemat": 5
+    },
+    "produk": {
+      "Sari Kurma Ajwa CBM ORIGINAL 100% 350gr Plus Propolis": 5
+    },
+    "pertama": "2026-08-15",
+    "terakhir": "2026-08-15",
+    "daftarPesanan": [
+      "260815DXHXEBW2"
+    ],
+    "no": 39
+  },
+  {
+    "username": "rinsgood14",
+    "totalOrder": 5,
+    "totalBelanja": 213750,
+    "totalDilepas": 166645,
+    "jasaKirim": {
+      "SPX Hemat": 5
+    },
+    "produk": {
+      "Sari Kurma Ajwa CBM ORIGINAL 350gr Plus Propolis": 5
+    },
+    "pertama": "2026-08-13",
+    "terakhir": "2026-08-13",
+    "daftarPesanan": [
+      "2608138YT5KNVW"
+    ],
+    "no": 40
+  },
+  {
+    "username": "tsn9jonz92",
+    "totalOrder": 5,
+    "totalBelanja": 213750,
+    "totalDilepas": 166645,
+    "jasaKirim": {
+      "SPX Hemat": 5
+    },
+    "produk": {
+      "Sari Kurma Ajwa CBM ORIGINAL 350gr Plus Propolis": 5
+    },
+    "pertama": "2026-08-15",
+    "terakhir": "2026-08-15",
+    "daftarPesanan": [
+      "260815DQRBR4P9"
+    ],
+    "no": 41
+  },
+  {
+    "username": "kamalin08",
+    "totalOrder": 5,
+    "totalBelanja": 213750,
+    "totalDilepas": 166645,
+    "jasaKirim": {
+      "SPX Hemat": 5
+    },
+    "produk": {
+      "Sari Kurma Ajwa CBM ORIGINAL 350gr Plus Propolis": 5
+    },
+    "pertama": "2026-08-11",
+    "terakhir": "2026-08-11",
+    "daftarPesanan": [
+      "2608114GSJP971"
+    ],
+    "no": 42
+  },
+  {
+    "username": "handayani.23.",
+    "totalOrder": 5,
+    "totalBelanja": 213750,
+    "totalDilepas": 166645,
+    "jasaKirim": {
+      "SPX Hemat": 5
+    },
+    "produk": {
+      "Sari Kurma Ajwa CBM ORIGINAL 350gr Plus Propolis": 5
+    },
+    "pertama": "2026-08-03",
+    "terakhir": "2026-08-03",
+    "daftarPesanan": [
+      "260803DPD2XDM0"
+    ],
+    "no": 43
+  },
+  {
+    "username": "wahyu_martanti",
+    "totalOrder": 5,
+    "totalBelanja": 208470,
+    "totalDilepas": 162385,
+    "jasaKirim": {
+      "SPX Standard": 5
+    },
+    "produk": {
+      "Sari Kurma Ajwa CBM ORIGINAL 100% 350gr Plus Propolis": 5
+    },
+    "pertama": "2026-08-04",
+    "terakhir": "2026-08-04",
+    "daftarPesanan": [
+      "260804EFX2217D"
+    ],
+    "no": 44
+  },
+  {
+    "username": "agussabun",
+    "totalOrder": 5,
+    "totalBelanja": 208470,
+    "totalDilepas": 162385,
+    "jasaKirim": {
+      "SPX Hemat": 5
+    },
+    "produk": {
+      "Sari Kurma Ajwa CBM ORIGINAL 100% 350gr Plus Propolis": 5
+    },
+    "pertama": "2026-08-04",
+    "terakhir": "2026-08-04",
+    "daftarPesanan": [
+      "260804G38JTPCX"
+    ],
+    "no": 45
+  },
+  {
+    "username": "nettyariningsih",
+    "totalOrder": 5,
+    "totalBelanja": 208470,
+    "totalDilepas": 159255,
+    "jasaKirim": {
+      "SPX Hemat": 5
+    },
+    "produk": {
+      "Sari Kurma Ajwa CBM ORIGINAL 100% 350gr Plus Propolis": 5
+    },
+    "pertama": "2026-07-28",
+    "terakhir": "2026-07-28",
+    "daftarPesanan": [
+      "260728SW584CTE"
+    ],
+    "no": 46
+  },
+  {
+    "username": "shidra",
+    "totalOrder": 5,
+    "totalBelanja": 213750,
+    "totalDilepas": 157155,
+    "jasaKirim": {
+      "Anteraja Reguler": 5
+    },
+    "produk": {
+      "Sari Kurma Ajwa CBM ORIGINAL 350gr Plus Propolis": 5
+    },
+    "pertama": "2026-08-13",
+    "terakhir": "2026-08-13",
+    "daftarPesanan": [
+      "26081398NYG37Q"
+    ],
+    "no": 47
+  },
+  {
+    "username": "luluk.maknunn",
+    "totalOrder": 5,
+    "totalBelanja": 184335,
+    "totalDilepas": 142855,
+    "jasaKirim": {
+      "SPX Standard": 5
+    },
+    "produk": {
+      "Sari Kurma Ajwa CBM ORIGINAL 100% 350gr Plus Propolis": 5
+    },
+    "pertama": "2026-08-08",
+    "terakhir": "2026-08-08",
+    "daftarPesanan": [
+      "260808R7H7G6XA"
+    ],
+    "no": 48
+  },
+  {
+    "username": "rindarsih18",
+    "totalOrder": 5,
+    "totalBelanja": 193800,
+    "totalDilepas": 137605,
+    "jasaKirim": {
+      "Anteraja Reguler": 5
+    },
+    "produk": {
+      "Madu Batuk ASYIFA Original 175 gram": 5
+    },
+    "pertama": "2026-08-11",
+    "terakhir": "2026-08-11",
+    "daftarPesanan": [
+      "2608113NJAVVNS"
+    ],
+    "no": 49
+  },
+  {
+    "username": "yongkysaputra009",
+    "totalOrder": 5,
+    "totalBelanja": 175000,
+    "totalDilepas": 130055,
+    "jasaKirim": {
+      "Anteraja Economy": 5
+    },
+    "produk": {
+      "Kurma Khalas Saad Premium Original 500gr & 1kg": 5
+    },
+    "pertama": "2026-08-21",
+    "terakhir": "2026-08-21",
+    "daftarPesanan": [
+      "260821VWS7RS71"
+    ],
+    "no": 50
+  }
+]
